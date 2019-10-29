@@ -1,7 +1,7 @@
 const express = require('express');
 const mountRoutes = require('.');
-const LoginSignUpDB = require('../../grubhub-backend/src/routes/LoginSignUpDB');
-const LoginSignUpDBObj = new LoginSignUpDB();
+//const LoginSignUpDB = require('../../grubhub-backend/src/routes/LoginSignUpDB');
+//const LoginSignUpDBObj = new LoginSignUpDB();
 
 
 var app = express();

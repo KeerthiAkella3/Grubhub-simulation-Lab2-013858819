@@ -1,4 +1,4 @@
-var rpc = new (require('./kafkarpc.js.js'))();
+var rpc = new (require('./kafkarpc'))();
 
 //make request to kafka
 function make_request(queue_name, msg_payload, callback){
