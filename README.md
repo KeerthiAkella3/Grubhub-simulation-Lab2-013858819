@@ -1,8 +1,8 @@
 # Lab2-013858819
 
-#CMPE273
-##Grubhub Application
-###Steps to run
+# CMPE273
+## Grubhub Application
+### Steps to run
 To run backend
 
 Go to server folder
