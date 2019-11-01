@@ -73,15 +73,16 @@ router.post('/buyerLogin', function (req, res) {
       console.log("Authentication failed. User does not exist.");
     }
   })
+})
 
 router.post('/ownerSignup', function (req, res) {
-  console.log("Inside signup post request");
+  console.log("Inside owner signup post request");
   console.log("Sending Request Body:");
   console.log(req.body);
-  let formatEmail = req.body.buyerEmailId.toLowerCase().trim();
+  let formatEmail = req.body.restaurantEmailId.toLowerCase().trim();
   console.log("formatted email:" + formatEmail);
 
-  kafka.make_request('loginSignuptopic',{"path":"buyerSignup", "formatEmail": formatEmail, "body": req.body}, function(err,result){
+  kafka.make_request('loginSignuptopic',{"path":"ownerSignup", "formatEmail": formatEmail, "body": req.body}, function(err,result){
    console.log("result")
    console.log(result)
     if (err) {
@@ -106,7 +107,7 @@ router.post('/ownerSignin', function (req, res) {
   console.log("Inside login post request");
   console.log("Request Body:");
   console.log(req.body);
-  formatEmail = req.body.buyerEmailId.toLowerCase().trim();
+  formatEmail = req.body.restaurantEmailId.toLowerCase().trim();
   console.log("formatted email:" + formatEmail);
   
   kafka.make_request('loginSignup_topics',{"path":"login", "formatEmail": formatEmail, "body": req.body}, function(err,result){
@@ -129,7 +130,7 @@ router.post('/ownerSignin', function (req, res) {
       console.log("Authentication failed. User does not exist.");
     }
   }
-  )}
+  )})
 
 
 
