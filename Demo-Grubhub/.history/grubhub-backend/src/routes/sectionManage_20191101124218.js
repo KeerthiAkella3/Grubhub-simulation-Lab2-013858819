@@ -13,40 +13,7 @@ router = express.Router();
 /*
   * Call this end-point when restaurant needs to delete a section.
 */
-router.post('/restaurantSection', function (req, res) {
 
-  let restaurantId = req.body.restaurantId;
- // let sectionName = req.body.sectionName;
-
-  var addSectionQuery = [];
-  const addSection = async () => {
-    kafka.make_request('loginSignuptopic',{"path":"restaurantSection", "restaurantId": restaurantId, "body": req.body}, function(err,result){
-    addSectionQuery = result;
-    console.log("result in restaurant section-backend ")
-    console.log(result)
-    if (addSectionQuery === undefined) {
-      res.status(404).json({
-        responseMessage: 'Order Not Found!'
-      });
-      console.log("order not found")
-    } else {
-      res.status(200).json({
-        responseMessage: "Order successfully Deleted!",
-        sectionId: addSectionQuery.insertId
-      });
-    }
-
-
-  try {
-    addSection();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(503).json({ responseMessage: 'Database not responding' });
-  }
-});
-  };
-})
 /*
   * Call this endpoint from Restaurant Owner, when restaurant Owner is managing status of order
   * From new --> preparing --> ready --> delivered.
