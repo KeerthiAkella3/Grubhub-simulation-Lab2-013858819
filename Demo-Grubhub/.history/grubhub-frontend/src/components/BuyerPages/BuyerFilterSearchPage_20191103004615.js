@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './BuyerPages.css'
 import Select from 'react-select'
 
+
 export class BuyerFilterSearchPage extends Component {
  
     customStyles = {

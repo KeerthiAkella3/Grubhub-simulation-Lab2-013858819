@@ -141,11 +141,10 @@ export class BuyerSearchPage extends Component {
                 // console.log(anItem.restaurantCuisine)
                 continue;
             } else {
-                let active = 1;
+                let active = 2;
                 for (let number = 1; number <= 5; number++) {
                 listGroupOrders.push(
                     <Pagination.Item key={number} active={number === active}>
-                        {number}
                     <ListGroup.Item eventKey={anItem.restaurantName} action onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={(e) => {
                         this.searchResultClickHandler(e, anItem)
                     }} style={listGroupStyle}>
@@ -171,7 +170,6 @@ export class BuyerSearchPage extends Component {
                             </Card.Body>
                         </Card>
                     </ListGroup.Item>
-                    
                     </Pagination.Item>
                 );
                     }
@@ -265,7 +263,7 @@ export class BuyerSearchPage extends Component {
 
                                     <Pagination.Item>{10}</Pagination.Item>
                                     <Pagination.Item>{11}</Pagination.Item>
-                                    <Pagination.Item>{12}</Pagination.Item>
+                                    <Pagination.Item active>{12}</Pagination.Item>
                                     <Pagination.Item>{13}</Pagination.Item>
                                     <Pagination.Item disabled>{14}</Pagination.Item>
 

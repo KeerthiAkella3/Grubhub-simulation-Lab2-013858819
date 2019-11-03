@@ -141,7 +141,7 @@ export class BuyerSearchPage extends Component {
                 // console.log(anItem.restaurantCuisine)
                 continue;
             } else {
-                let active = 1;
+                let active = 2;
                 for (let number = 1; number <= 5; number++) {
                 listGroupOrders.push(
                     <Pagination.Item key={number} active={number === active}>
@@ -265,7 +265,7 @@ export class BuyerSearchPage extends Component {
 
                                     <Pagination.Item>{10}</Pagination.Item>
                                     <Pagination.Item>{11}</Pagination.Item>
-                                    <Pagination.Item>{12}</Pagination.Item>
+                                    <Pagination.Item active>{12}</Pagination.Item>
                                     <Pagination.Item>{13}</Pagination.Item>
                                     <Pagination.Item disabled>{14}</Pagination.Item>
 

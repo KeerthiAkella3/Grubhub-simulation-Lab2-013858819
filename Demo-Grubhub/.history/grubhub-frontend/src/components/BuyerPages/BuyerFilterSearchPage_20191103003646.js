@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import './BuyerPages.css'
 import Select from 'react-select'
+import ReactPaginate from 'react-paginate';
+import ReactDOM from "react-dom";
+import Pagination from "react-js-pagination";
+require("bootstrap/less/bootstrap.less");
 
 export class BuyerFilterSearchPage extends Component {
- 
+
     customStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -24,7 +28,10 @@ export class BuyerFilterSearchPage extends Component {
 
     }
 
-   
+    handlePageChange(pageNumber) {
+        console.log(`active page is ${pageNumber}`);
+        this.setState({activePage: pageNumber});
+      }
 
     render() {
 
@@ -32,12 +39,12 @@ export class BuyerFilterSearchPage extends Component {
             { label: 'Italian', value: 'Italian' },
             { label: 'Indian', value: 'Indian' },
             { label: 'Chinese', value: 'Chinese' },
-            { label: 'Thai', value: 'Thai' },
+            { label: 'Thai', value: 'Thai'},
         ];
 
         return (
             <div>
-                <h3 style={{
+                <h3 style= {{
                     display: "block",
                     fontSize: "18px",
                     marginBlockStart: "1em",
@@ -50,19 +57,27 @@ export class BuyerFilterSearchPage extends Component {
                     lineHeight: "1.37337",
                     fontFamily: "sans-bold",
                     boxSize: "inherit",
-                }}>
+                }}> 
                     Filter by Cuisine
                 </h3>
-              
+                <div>
+        <Pagination
+          activePage={this.state.activePage}
+          itemsCountPerPage={10}
+          totalItemsCount={450}
+          pageRangeDisplayed={5}
+          onChange={::this.handlePageChange}
+        />
+      </div>
                 <Select
                     className="basic-single"
                     classNamePrefix="select"
                     // defaultValue={options[0]}
                     name="color"
-                    options={options}
-                    onChange={this.props.onSelectingOption} />
+                    options={options} 
+                    onChange={this.props.onSelectingOption}/>
             </div>
-
+            
         )
     }
 }

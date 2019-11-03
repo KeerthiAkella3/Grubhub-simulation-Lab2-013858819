@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import './BuyerPages.css'
 import Select from 'react-select'
+import ReactPaginate from 'react-paginate';
+import ReactDOM from "react-dom";
+import Pagination from "react-js-pagination";
+require("bootstrap/less/bootstrap.less");
 
 export class BuyerFilterSearchPage extends Component {
  

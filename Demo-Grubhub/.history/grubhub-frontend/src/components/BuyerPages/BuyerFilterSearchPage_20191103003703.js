@@ -1,9 +1,13 @@
 import React, { Component } from 'react'
 import './BuyerPages.css'
 import Select from 'react-select'
+import ReactPaginate from 'react-paginate';
+import ReactDOM from "react-dom";
+import Pagination from "react-js-pagination";
+require("bootstrap/less/bootstrap.less");
 
 export class BuyerFilterSearchPage extends Component {
- 
+
     customStyles = {
         option: (provided, state) => ({
             ...provided,
@@ -24,7 +28,10 @@ export class BuyerFilterSearchPage extends Component {
 
     }
 
-   
+    handlePageChange(pageNumber) {
+        console.log(`active page is ${pageNumber}`);
+        this.setState({ activePage: pageNumber });
+    }
 
     render() {
 
@@ -53,7 +60,15 @@ export class BuyerFilterSearchPage extends Component {
                 }}>
                     Filter by Cuisine
                 </h3>
-              
+                <div>
+                    <Pagination
+                        activePage={this.state.activePage}
+                        itemsCountPerPage={10}
+                        totalItemsCount={450}
+                        pageRangeDisplayed={5}
+                        onChange={: :this.handlePageChange}
+                  />
+      </div>
                 <Select
                     className="basic-single"
                     classNamePrefix="select"
