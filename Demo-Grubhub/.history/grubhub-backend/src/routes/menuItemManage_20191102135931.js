@@ -69,21 +69,19 @@ router.get('/menu', function (req, res) {
               console.log("Unable to read image");
             }
           }
-          console.log("anItem.items.length")
-          console.log(anItem.items.length)
-          for (var j = 0; j< anItem.items.length;j++ ){
+          for (var j = 0; j< anItem.length;j++ ){
             resItem = {
               itemId: restaurantIdINT,
-              itemName: anItem.items[j].itemName,
-              itemDesc: anItem.items[j].itemDescription,
-              itemPrice: anItem.items[j].itemPrice,
-              itemSection:anItem.sectionName,
+              itemName: anItem.items.itemName,
+              itemDesc: anItem.items.itemDescription,
+              itemPrice: anItem.items.itemPrice,
+              itemSection: anItem.SectionName,
+              itemCuisine: anItem.cuisine,
               itemImage: base64Image,
             }
-            menuList.push(resItem);
           }
           
-          
+          menuList.push(resItem);
           sectionsResult.push(anItem.sectionName)
         }
         console.log("menu items in menu item manage")

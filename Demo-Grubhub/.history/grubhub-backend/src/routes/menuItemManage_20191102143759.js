@@ -80,10 +80,9 @@ router.get('/menu', function (req, res) {
               itemSection:anItem.sectionName,
               itemImage: base64Image,
             }
-            menuList.push(resItem);
           }
           
-          
+          menuList.push(resItem);
           sectionsResult.push(anItem.sectionName)
         }
         console.log("menu items in menu item manage")

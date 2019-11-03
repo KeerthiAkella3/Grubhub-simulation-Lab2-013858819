@@ -235,7 +235,6 @@ export class MenuPage extends Component {
     }
 
     saveSectionAddModal = (sectionName) => {
-        debugger;
         let restaurantId = cookie.load('cookie1');
         console.log("restaurant Id")
         console.log(restaurantId)
@@ -267,7 +266,6 @@ export class MenuPage extends Component {
     }
 
     saveMenuItemAddModal = (addItemState) => {
-        debugger
         let restaurantId = this.state.restaurantId;
         let sections = [];
         let menu = [];
@@ -389,7 +387,6 @@ export class MenuPage extends Component {
                 let threeMenuItemsDOM = [];
                 for (let curColumn = 0; curColumn < 3 && index < allItems.length; curColumn++ , index++) {
                     let anItem = allItems[index];
-                    debugger
                     if (anItem.itemSection === sectionName) {
                         console.log("creating cards for " + anItem.itemName)
                         threeMenuItemsDOM.push(

@@ -129,7 +129,6 @@ function addMenuItem(msg, callback) {
         console.log(section["items"])
         
         if (section["sectionName"] == sectionName) {
-          console.log("sectionName equal")
           section["items"].push({
             "itemName": msg.itemData.itemName,
             "itemDescription": msg.itemData.itemDesc,

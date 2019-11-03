@@ -27,7 +27,7 @@ export class ListOrdersPage extends Component {
 
     getDataFromDB = () => {
         const statusOfAllOrders = this.props.status;
-        const restaurantId = cookie.load('cookie1');
+        const restaurantId = cookie.load('cookie2');
         console.log("Asking backend for details on restaurant with ID = " + restaurantId + " and with status = " + statusOfAllOrders);
        // e.preventDefault();
         axios.defaults.withCredentials = true;

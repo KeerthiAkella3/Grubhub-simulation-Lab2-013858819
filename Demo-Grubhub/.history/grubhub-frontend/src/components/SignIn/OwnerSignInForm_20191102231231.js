@@ -8,7 +8,8 @@ import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 import Card from 'react-bootstrap/Card'
 
-
+import Draggable from 'react-draggable'; // The default
+import {DraggableCore} from 'react-draggable'; // <DraggableCore>
 import Draggable, {DraggableCore} from 'react-draggable';
 
 
@@ -87,7 +88,9 @@ class OwnerSignInForm extends Component {
                 <br></br>
                 <h4>Sign in with your Grubhub account</h4>
                 <br></br>
-
+                <Draggable>
+                    <div>I can now be moved around!</div>
+                </Draggable>
                 <center>
                 <Form style={{ width: '18rem' }}>
                     <Form.Group controlId="formBasicEmail">

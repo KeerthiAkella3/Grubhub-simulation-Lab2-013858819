@@ -113,7 +113,6 @@ function addMenuItem(msg, callback) {
   console.log("In add menu Item service. Msg: ", msg);
   var sectionName = msg.sectionName
   Restaurant.findOne({ _id: msg.restaurantId }, function (err, restaurant) {
-    console.log("okayyyyy")
     if (restaurant) {
       var item = {
         "itemName": msg.itemData.itemName,
@@ -123,13 +122,11 @@ function addMenuItem(msg, callback) {
       }
 
       restaurant.sections.forEach(function (section) {
-        console.log("whyyyyyy")
         console.log("before adding in section");
         console.log(section);
         console.log(section["items"])
         
         if (section["sectionName"] == sectionName) {
-          console.log("sectionName equal")
           section["items"].push({
             "itemName": msg.itemData.itemName,
             "itemDescription": msg.itemData.itemDesc,

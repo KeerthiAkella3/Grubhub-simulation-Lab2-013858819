@@ -113,7 +113,6 @@ function addMenuItem(msg, callback) {
   console.log("In add menu Item service. Msg: ", msg);
   var sectionName = msg.sectionName
   Restaurant.findOne({ _id: msg.restaurantId }, function (err, restaurant) {
-    console.log("okayyyyy")
     if (restaurant) {
       var item = {
         "itemName": msg.itemData.itemName,
@@ -123,20 +122,20 @@ function addMenuItem(msg, callback) {
       }
 
       restaurant.sections.forEach(function (section) {
-        console.log("whyyyyyy")
         console.log("before adding in section");
         console.log(section);
         console.log(section["items"])
-        
+        section['items'] = [];
+        restaurant.save()
+
         if (section["sectionName"] == sectionName) {
-          console.log("sectionName equal")
           section["items"].push({
             "itemName": msg.itemData.itemName,
             "itemDescription": msg.itemData.itemDesc,
             "itemImg": msg.itemData.itemImage,
             "itemPrice": msg.itemData.itemPrice
           });
-          
+          restaurant.save()
           console.log(section["items"]);
         }
       });
@@ -160,20 +159,17 @@ function addMenuItem(msg, callback) {
 function deleteMenuItem(msg, callback) {
   console.log("In delete menu Item section service. Msg: ", msg);
   var sectionName = msg.sectionName
-  var itemName = msg.itemData.itemName
+  var itemName = msg.body.item.itemName
   Restaurant.updateOne({ _id: msg.restaurantId }, { "sectionName": sectionName }, {
     $pull: {
       items: { "itemName": itemName }
-    }, function(err, result) {
-      if (err) {
-        console.log("unable to update database", err);
-        callback(err, "Database Error");
-      } else {
-        console.log("Deletion Successful");
-      }
     }
-
   })
+  if (!err) {
+    callback(null, { status: 200, message: "item is deleted successfully!!" });
+  } else {
+    callback(null, { status: 200, message: "item not deleted!!" });
+  }
 }
 
 function getMenuItem(msg, callback) {
@@ -193,11 +189,6 @@ function getMenuItem(msg, callback) {
       console.log("item not displayed")
     }
   })
-}
-
-function getAllItemMatch(msg, callback){
-  console.log("in get all item match ")
-  
 }
 
 

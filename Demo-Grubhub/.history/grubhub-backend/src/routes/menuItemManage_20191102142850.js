@@ -46,7 +46,7 @@ router.get('/menu', function (req, res) {
     if (getMenuResult) {
       console.log(getMenuResult);
       for (index = 0; index < getMenuResult.length; index++) {
-        let anItem = getMenuResult[index];
+        let anItem[j].itemImg = getMenuResult[index];
         if (anItem) {
           let imageFilepath = undefined;
           let base64Image = undefined;
@@ -69,21 +69,18 @@ router.get('/menu', function (req, res) {
               console.log("Unable to read image");
             }
           }
-          console.log("anItem.items.length")
-          console.log(anItem.items.length)
           for (var j = 0; j< anItem.items.length;j++ ){
             resItem = {
               itemId: restaurantIdINT,
               itemName: anItem.items[j].itemName,
               itemDesc: anItem.items[j].itemDescription,
               itemPrice: anItem.items[j].itemPrice,
-              itemSection:anItem.sectionName,
+              itemSection:anItem.sectionName
               itemImage: base64Image,
             }
-            menuList.push(resItem);
           }
           
-          
+          menuList.push(resItem);
           sectionsResult.push(anItem.sectionName)
         }
         console.log("menu items in menu item manage")
