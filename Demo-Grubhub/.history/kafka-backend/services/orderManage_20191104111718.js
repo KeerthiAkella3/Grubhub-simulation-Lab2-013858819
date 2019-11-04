@@ -23,30 +23,30 @@ exports.orderService = function orderService(msg, callback) {
 };
 
 function placeOrder(msg, callback) {
-  console.log("In add place order service. Msg: ", msg);
+  console.log("In add Section service. Msg: ", msg);
   let orderId = undefined;
-  // let writeResult = Orders.insert({
-  //   restaurantId : msg.orderData.restaurantId,
-  //   restaurantEmail : msg.orderData.restaurantEmailId,
-  //   buyerEmailId : msg.orderData.buyerEmailId,
-  //   buyerId : msg.orderData.buyerId,
-  //   buyerName : msg.orderData.buyerName,
-  //   buyerAddress : msg.orderData.buyerAddress,
-  //   restaurantOrderStatus : msg.orderData.restaurantOrderStatus,
-  //   buyerOrderStatus : msg.orderData.buyerOrderStatus,
-  //   items : msg.orderData.cartItems,
-  // }, function(err, docsInserted) {
-  //   if (err) {
-  //     console.log("Failed to place an order in MongoDB.");
-  //     callback(err, "Database error!");
-  //   } else {
-  //     console.log("Placed an order successfully in MongoDB. Id: " + orderId);
-  //     callback(null, {
-  //       status: 200, 
-  //       orderId: docsInserted[0]._id,
-  //     })
-  //   }
-  // });
+  let writeResult = Orders.insert({
+    restaurantId : msg.orderData.restaurantId,
+    restaurantEmail : msg.orderData.restaurantEmailId,
+    buyerEmailId : msg.orderData.buyerEmailId,
+    buyerId : msg.orderData.buyerId,
+    buyerName : msg.orderData.buyerName,
+    buyerAddress : msg.orderData.buyerAddress,
+    restaurantOrderStatus : msg.orderData.restaurantOrderStatus,
+    buyerOrderStatus : msg.orderData.buyerOrderStatus,
+    items : msg.orderData.cartItems,
+  }, function(err, docsInserted) {
+    if (err) {
+      console.log("Failed to place an order in MongoDB.");
+      callback(err, "Database error!");
+    } else {
+      console.log("Placed an order successfully in MongoDB. Id: " + orderId);
+      callback(null, {
+        status: 200, 
+        orderId: docsInserted[0]._id,
+      })
+    }
+  });
 }
 
 function getMenu(msg, callback) {

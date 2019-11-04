@@ -23,7 +23,7 @@ exports.orderService = function orderService(msg, callback) {
 };
 
 function placeOrder(msg, callback) {
-  console.log("In add place order service. Msg: ", msg);
+  console.log("In add Section service. Msg: ", msg);
   let orderId = undefined;
   // let writeResult = Orders.insert({
   //   restaurantId : msg.orderData.restaurantId,
