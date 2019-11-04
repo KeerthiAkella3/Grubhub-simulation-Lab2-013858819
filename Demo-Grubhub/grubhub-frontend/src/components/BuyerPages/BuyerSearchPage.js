@@ -9,11 +9,10 @@ import Col from 'react-bootstrap/Col'
 import BuyerFilterSearchPage from './BuyerFilterSearchPage'
 import { Redirect } from 'react-router-dom'
 import BuyerNavBar from './BuyerNavBar'
-import axios from 'axios'
-import ReactPaginate from 'react-paginate';
-import ReactDOM from "react-dom";
-import PageItem from 'react-bootstrap/PageItem'
 import Pagination from 'react-bootstrap/Pagination'
+import PageItem from 'react-bootstrap/PageItem'
+
+import axios from 'axios'
 
 /**
  * List all search results:
@@ -33,7 +32,8 @@ export class BuyerSearchPage extends Component {
             listGroupItemColor: "inherit",
             filterByCuisine: undefined,
             nextPagePathName: undefined,
-            searchQuery: undefined
+            searchQuery: undefined,
+            paginationActive: 1,
         }
         this.handleFilterSelect = this.handleFilterSelect.bind(this);
     }
@@ -104,7 +104,15 @@ export class BuyerSearchPage extends Component {
             restaurantName: anItem.restaurantName,
         })
     }
-    
+
+    onClickPaginationItem = (e, number) => {
+        e.preventDefault();
+        // console.log('clicked an item');
+        this.setState({
+            paginationActive: number,
+        })
+    }
+
     render() {
         // console.log(this.state);
         if (this.state.nextPagePathName && this.state.nextPagePathName !== "") {
@@ -125,7 +133,9 @@ export class BuyerSearchPage extends Component {
         let searchResults = this.state.searchResults;
         let listGroupOrders = [];
         let filterByCuisine = this.state.filterByCuisine;
-        // listOfAllOrders is an array that contains each order information
+        let maxResultsPerPage = 3;
+
+        // List all search results in cards 
         for (index = 0; searchResults && index < searchResults.length; index++) {
             let anItem = searchResults[index];
             let listGroupStyle = {
@@ -135,18 +145,14 @@ export class BuyerSearchPage extends Component {
                 style: "{{ backgroundColor: this.state.listGroupItemColor }}",
             }
 
-            console.log(anItem.restaurantCuisine)
-            console.log(filterByCuisine)
+            // console.log(anItem.restaurantCuisine)
+            // console.log(filterByCuisine)
             if (filterByCuisine !== undefined && filterByCuisine !== anItem.restaurantCuisine) {
                 // console.log(anItem.restaurantCuisine)
                 continue;
             } else {
-                let active = 1;
-                for (let number = 1; number <= 5; number++) {
                 listGroupOrders.push(
-                    <Pagination.Item key={number} active={number === active}>
-                        {number}
-                    <ListGroup.Item eventKey={anItem.restaurantName} action onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={(e) => {
+                    <ListGroup.Item key={anItem.restaurantName} action onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={(e) => {
                         this.searchResultClickHandler(e, anItem)
                     }} style={listGroupStyle}>
                         <Card as="a" style={{
@@ -171,28 +177,37 @@ export class BuyerSearchPage extends Component {
                             </Card.Body>
                         </Card>
                     </ListGroup.Item>
-                    
-                    </Pagination.Item>
                 );
-                    }
             }
         }
-       
+
+        // restrict results based on pagination
+        let active = this.state.paginationActive;     // Initially active key
+        let startIndex = 0 + (active - 1) * maxResultsPerPage;
+        let endIndex = startIndex + maxResultsPerPage;
         
-        
+
+        // Pagination
+        let items = [];     // 
+        for (let number = 1; number <= Math.ceil(listGroupOrders.length/maxResultsPerPage); number++) {
+            let isActive = (number === active);
+            items.push(
+                <Pagination.Item key={number} active={isActive} onClick={(e) => {
+                    this.onClickPaginationItem(e, number)
+                }}>
+                    {number}
+                </Pagination.Item>,
+            );
+        }
+
         const paginationBasic = (
-          <div>
-            <Pagination>{listGroupOrders}</Pagination>
-            <br />
-        
-            <Pagination size="lg">{listGroupOrders}</Pagination>
-            <br />
-        
-            <Pagination size="sm">{listGroupOrders}</Pagination>
-          </div>
+            <div>
+                <Pagination>{items}</Pagination>
+            </div>
         );
-        
-        
+
+        listGroupOrders = listGroupOrders.slice(startIndex, endIndex);
+
         return (
             <div style={{
                 width: "100%",
@@ -255,26 +270,37 @@ export class BuyerSearchPage extends Component {
                             backgroundColor: "white",
                             zIndex: "1",
                         }}>
-                            <ListGroup defaultActiveKey="#link1">
-                            {paginationBasic}
-                                <Pagination>
-                                    <Pagination.First />
-                                    <Pagination.Prev />
-                                    <Pagination.Item>{1}</Pagination.Item>
-                                    <Pagination.Ellipsis />
-
-                                    <Pagination.Item>{10}</Pagination.Item>
-                                    <Pagination.Item>{11}</Pagination.Item>
-                                    <Pagination.Item>{12}</Pagination.Item>
-                                    <Pagination.Item>{13}</Pagination.Item>
-                                    <Pagination.Item disabled>{14}</Pagination.Item>
-
-                                    <Pagination.Ellipsis />
-                                    <Pagination.Item>{20}</Pagination.Item>
-                                    <Pagination.Next />
-                                    <Pagination.Last />
-                                </Pagination>
-                            </ListGroup>
+                            <Row style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                marginLeft: "0%",
+                                marginRight: "0%",
+                                paddingLeft: "0%",
+                                paddingRight: "0%",
+                                height: "90%",
+                                width: "100%",
+                                borderRight: "none",
+                            }}>
+                                <ListGroup defaultActiveKey="#link1" style={{
+                                    height: "100%",
+                                    width: "100%",
+                                }}>
+                                    {listGroupOrders}
+                                </ListGroup>
+                            </Row>
+                            <Row style={{
+                                display: "flex",
+                                flexWrap: "wrap",
+                                marginLeft: "0%",
+                                marginRight: "0%",
+                                paddingLeft: "0%",
+                                paddingRight: "0%",
+                                height: "10%",
+                                width: "100%",
+                                borderRight: "none",
+                            }}>
+                                {paginationBasic}
+                            </Row>
                         </Col>
                     </Row>
                 </Container>

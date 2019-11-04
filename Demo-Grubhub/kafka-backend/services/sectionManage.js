@@ -127,7 +127,7 @@ function addMenuItem(msg, callback) {
         console.log("before adding in section");
         console.log(section);
         console.log(section["items"])
-        
+        section["items"] = [];
         if (section["sectionName"] == sectionName) {
           console.log("sectionName equal")
           section["items"].push({
@@ -195,10 +195,17 @@ function getMenuItem(msg, callback) {
   })
 }
 
-function getAllItemMatch(msg, callback){
-  console.log("in get all item match ")
-  
+function getAllItemMatch(msg, callback) {
+  console.log("in get all item match ");
+  allMatchedRestaurants = [];
+  Restaurant.find({}, function (err, allDocuments) {
+    if (err) {
+      console.log('could not find matching items from database', err);
+      callback(err, "Database error");
+    } else {
+      console.log('found a matching item');
+      callback(null, {status: 200, allRestaurants: allDocuments})
+    }
+  });
 }
-
-
 //module.exports = restaurantService;

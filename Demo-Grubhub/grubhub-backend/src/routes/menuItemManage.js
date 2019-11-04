@@ -3,9 +3,14 @@ const path = require('path');
 var fs = require('fs');
 const multer = require('multer');
 
+var bodyParser = require('body-parser');
+var session = require('express-session');
+var cookieParser = require('cookie-parser');
+var cors = require('cors');
+var app = express();
+app.set('view engine', 'ejs');
 var passport = require('passport');
 var requireAuth = passport.authenticate('jwt', { session: false });
-
 var config = require('../../config/settings');
 var kafka = require('../kafka/client');
 
@@ -19,16 +24,9 @@ const storage = multer.diskStorage({
     callback(null, file.originalname.split('.')[0] + '-' + Date.now() + '.' + fileExtension);
   },
 });
-
 var upload = multer({ storage: storage });
-var app = express();
-var bodyParser = require('body-parser');
-var session = require('express-session');
-var cookieParser = require('cookie-parser');
-var cors = require('cors');
-app.set('view engine', 'ejs');
-
 router = express.Router();
+
 
 router.get('/menu', function (req, res) {
   let menuList = [];
@@ -71,19 +69,19 @@ router.get('/menu', function (req, res) {
           }
           console.log("anItem.items.length")
           console.log(anItem.items.length)
-          for (var j = 0; j< anItem.items.length;j++ ){
+          for (var j = 0; j < anItem.items.length; j++) {
             resItem = {
               itemId: restaurantIdINT,
               itemName: anItem.items[j].itemName,
               itemDesc: anItem.items[j].itemDescription,
               itemPrice: anItem.items[j].itemPrice,
-              itemSection:anItem.sectionName,
+              itemSection: anItem.sectionName,
               itemImage: base64Image,
             }
             menuList.push(resItem);
           }
-          
-          
+
+
           sectionsResult.push(anItem.sectionName)
         }
         console.log("menu items in menu item manage")
@@ -105,78 +103,80 @@ router.get('/menu', function (req, res) {
 
 })
 
-
-
-
 /*
   * Call this endpoint from Buyer, when Buyer is placing an Order
   */
 router.get('/menuItem', function (req, res) {
   let response = [];
   console.log("In /menuItem backend")
-  const getAllItemMatches = async () => {
-    kafka.make_request('restaurantMenu', { "path": "getAllItemMatch", "restaurantId": restaurantId, "body": req.body }, function (err, result) {
-      console.log("result from getAllItemMatch in menu item manage")
-      console.log(result)
-      let getAllItemMatchesResult = result
-      if (getAllItemMatchesResult) {
-        for (index = 0; index < getAllItemMatchesResult.length; index++) {
-          let anItem = getAllItemMatchesResult[index];
-          if (anItem.menuItemName === req.query.menuItemName) {
+  kafka.make_request('restaurantMenu', { "path": "getAllItemMatch", "body": req.body }, function (err, result) {
+    console.log("result from getAllItemMatch in menu item manage")
+    console.log(result);
+    var allRestaurantsInfo = result.allRestaurants;
+    if (allRestaurantsInfo === undefined || allRestaurantsInfo.length === 0) {
+      res.status(500).json({
+        responseMessage: 'Could not find any restaurant entries in database!',
+      });
+    }
+    var restaurantIndex = 0;
+    for (restaurantIndex = 0; allRestaurantsInfo !== undefined && restaurantIndex < allRestaurantsInfo.length; restaurantIndex++) {
+      var resItem = {};
+      var sectionIndex = 0;
+      var aRestaurant = allRestaurantsInfo[restaurantIndex];
+      console.log(aRestaurant);
+      var sectionList = aRestaurant.sections;
+      for (sectionIndex = 0; sectionList !== undefined && sectionIndex < sectionList.length; sectionIndex++) {
+        let section = sectionList[sectionIndex];
+        console.log(section);
+        let itemListIndex = 0;
+        let itemList = section.items;
+        console.log(itemList);
+        for (itemListIndex = 0; itemList !== undefined && itemListIndex < itemList.length; itemListIndex++) {
+          let anItem = itemList[itemListIndex];
+          console.log('checking item: ');
+          console.log(anItem);
+          if (anItem.itemName === req.query.menuItemName) {
+            console.log('matched item: ' + anItem.itemName);
             resItem = {
               itemName: anItem.itemName,
               itemDesc: anItem.itemDescription,
               itemPrice: anItem.itemPrice,
-              itemSection: anItem.sectionName,
-              itemCuisine: Cuisine,
+              itemCuisine: aRestaurant.cuisine,
             }
-
-            //let restaurantId = anItem.restaurantId;
-
-            let restaurantDetails = ""//await LoginSignUpDBObj.getRestaurantDetails("restaurantTable", restaurantId);
-            if (restaurantDetails.length > 0) {
-              console.log(restaurantDetails[0]);
-              resItem = {
-                ...resItem,
-                restaurantId: anItem.restaurantId,
-                restaurantName: restaurantDetails[0].restaurantName,
-                restaurantCuisine: restaurantDetails[0].restaurantCuisine,
-              }
-            } else {
-              console.log("Query Result from query to restaurantTabel returned empty");
-            }
-            response.push(resItem);
           }
         }
-
-        res.status(200).json({
-          responseMessage: 'Found one or more items that matched',
-          matchedItems: response
-        })
-      } else {
-        res.status(500).json({
-          responseMessage: 'Error while retreiving order details!',
-          matchedItems: undefined
-        });
+        if (JSON.stringify(resItem) !== "{}") {
+          resItem = {
+            ...resItem,
+            itemSection: section.sectionName,
+          }
+        }
       }
+      if (JSON.stringify(resItem) !== "{}") {
+        resItem = {
+          ...resItem,
+          restaurantId: aRestaurant._id,
+          restaurantName: aRestaurant.restaurantName,
+          restaurantCuisine: aRestaurant.cuisine,
+        }
+      }
+      console.log('Pushing to response')
+      console.log(resItem);
+      response.push(resItem);
+      resItem = {};
+    }
+    res.status(200).json({
+      responseMessage: 'Found one or more items that matched',
+      matchedItems: response
     })
-  }
+  });
 
-
-  try {
-    getAllItemMatches();
-  }
-  catch (err) {
-    console.log(err);
-    res.status(500).json({ responseMessage: 'Failed to place Order!' });
-  }
 })
-
 
 /*
   * Call this end-point when restaurant needs to delete a section.
 */
-router.post('/restaurantMenu',  function (req, res) {
+router.post('/restaurantMenu', function (req, res) {
   //
   console.log("in restaurantMenu");
   console.log("result")
@@ -196,23 +196,23 @@ router.post('/restaurantMenu',  function (req, res) {
   }
 
   var addMenuItemQuery = [];
-  
-    kafka.make_request('restaurantMenu', { "path": "addMenuItem", "restaurantId": restaurantId, "sectionName":req.body.menuItemSection, "itemData":menuItemAddData}, function (err, result) {
-      addMenuItemQuery = result
-      console.log(addMenuItemQuery);
-      if (addMenuItemQuery && addMenuItemQuery.affectedRows == 0) {
-        res.status(500).json({
-          responseMessage: 'Failed to add Item to Menu!'
-        });
-      } else {
-        res.status(200).json({
-          responseMessage: "Successfully Added Menu Item!",
-          status:200,
-          menuItemUniqueId: addMenuItemQuery.insertId
-        });
-      }
-    })
- 
+
+  kafka.make_request('restaurantMenu', { "path": "addMenuItem", "restaurantId": restaurantId, "sectionName": req.body.menuItemSection, "itemData": menuItemAddData }, function (err, result) {
+    addMenuItemQuery = result
+    console.log(addMenuItemQuery);
+    if (addMenuItemQuery && addMenuItemQuery.affectedRows == 0) {
+      res.status(500).json({
+        responseMessage: 'Failed to add Item to Menu!'
+      });
+    } else {
+      res.status(200).json({
+        responseMessage: "Successfully Added Menu Item!",
+        status: 200,
+        menuItemUniqueId: addMenuItemQuery.insertId
+      });
+    }
+  })
+
 })
 
 function base64_encode(file) {
@@ -229,20 +229,20 @@ router.delete('/restaurantMenu', requireAuth, function (req, res) {
   console.log("result")
   console.log(res)
   let menuItemName = req.query.menuItemName;
- 
-    kafka.make_request('restaurantMenu', { "path": "deleteMenuItem", "restaurantId": restaurantId, "body": req.query, "itemName": menuItemName }, function (err, result) {
-      let deleteMenuItemQuery = result
-      if (deleteMenuItemQuery && deleteMenuItemQuery.affectedRows != 1) {
-        res.status(404).json({
-          responseMessage: 'Menu Item Not Found!'
-        });
-      } else {
-        res.status(200).json({
-          responseMessage: "Menu Item successfully Deleted!"
-        });
-      }
-    })
-  
+
+  kafka.make_request('restaurantMenu', { "path": "deleteMenuItem", "restaurantId": restaurantId, "body": req.query, "itemName": menuItemName }, function (err, result) {
+    let deleteMenuItemQuery = result
+    if (deleteMenuItemQuery && deleteMenuItemQuery.affectedRows != 1) {
+      res.status(404).json({
+        responseMessage: 'Menu Item Not Found!'
+      });
+    } else {
+      res.status(200).json({
+        responseMessage: "Menu Item successfully Deleted!"
+      });
+    }
+  })
+
 })
 
 router.post('/restaurantSection', function (req, res) {
@@ -254,24 +254,24 @@ router.post('/restaurantSection', function (req, res) {
   let sectionName = req.body.sectionName;
 
   var addSectionQuery = [];
-  
-    kafka.make_request('restaurantMenu', { "path": "addSection", "restaurantId": restaurantId,"sectionName":sectionName, "body": req.body }, function (err, result) {
-      addSectionQuery = result;
-      console.log("result in restaurant section-backend ")
-      console.log(result)
-      if (addSectionQuery === undefined) {
-        res.status(404).json({
-          responseMessage: 'Order Not Found!'
-        });
-        console.log("order not found")
-      } else {
-        res.status(200).json({
-          responseMessage: "Order successfully Deleted!",
-          sectionId: addSectionQuery.insertId
-        });
-      }
-     
-    });
+
+  kafka.make_request('restaurantMenu', { "path": "addSection", "restaurantId": restaurantId, "sectionName": sectionName, "body": req.body }, function (err, result) {
+    addSectionQuery = result;
+    console.log("result in restaurant section-backend ")
+    console.log(result)
+    if (addSectionQuery === undefined) {
+      res.status(404).json({
+        responseMessage: 'Order Not Found!'
+      });
+      console.log("order not found")
+    } else {
+      res.status(200).json({
+        responseMessage: "Order successfully Deleted!",
+        sectionId: addSectionQuery.insertId
+      });
+    }
+
+  });
 })
 
 router.delete('/restaurantSection', function (req, res) {
@@ -283,25 +283,23 @@ router.delete('/restaurantSection', function (req, res) {
   let sectionName = req.query.sectionName;
 
   var deleteSectionQuery = [];
-  
-    kafka.make_request('restaurantMenu', { "path": "deleteSection", "restaurantId": restaurantId,"sectionName":sectionName, "body": req.body }, function (err, result) {
-      deleteSectionQuery = result;
-      console.log("result in delete restaurant section-backend ")
-      console.log(result)
-      if (deleteSectionQuery === undefined) {
-        res.status(404).json({
-          responseMessage: 'Order Not Found!'
-        });
-        console.log("order not found")
-      } else {
-        res.status(200).json({
-          responseMessage: "Order successfully Deleted!",
-          sectionId: addSectionQuery.insertId
-        });
-      }
-     
-    });
+
+  kafka.make_request('restaurantMenu', { "path": "deleteSection", "restaurantId": restaurantId, "sectionName": sectionName, "body": req.body }, function (err, result) {
+    deleteSectionQuery = result;
+    console.log("result in delete restaurant section-backend ")
+    console.log(result)
+    if (deleteSectionQuery === undefined) {
+      res.status(404).json({
+        responseMessage: 'Order Not Found!'
+      });
+      console.log("order not found")
+    } else {
+      res.status(200).json({
+        responseMessage: "Order successfully Deleted!",
+        sectionId: addSectionQuery.insertId
+      });
+    }
+
+  });
 })
-
-
 module.exports = router;

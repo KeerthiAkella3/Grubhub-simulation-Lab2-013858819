@@ -12,7 +12,7 @@ var app = express();
 app.set('view engine', 'ejs');
 
 router = express.Router();
-var exports = module.exports= {};
+var exports = module.exports = {};
 
 exports.loginSignupService = function loginSignupService(msg, callback) {
     console.log("e path:", msg.path);
@@ -28,9 +28,46 @@ exports.loginSignupService = function loginSignupService(msg, callback) {
             break;
         case "ownerSignin":
             ownerSignIn(msg, callback);
-            break;    
+            break;
+        case "restaurantProfile":
+            restaurantDetails(msg, callback);
+            break;
+        case "buyerProfile":
+            buyerDetails(msg, callback);
+            break;
     }
 };
+
+function buyerDetails(msg, callback) {
+    Users.findOne({ _id: msg.buyerId }, function (err, result) {
+        if (err) {
+            console.log(err);
+            console.log("unable to read the database");
+            callback(err, "unable to read the database");
+        } else if (result) {
+            console.log("buyer from mongoDB:", result);
+            callback(null, { status: 200, result});
+        } else {
+            callback(null, { status: 400 });
+        }
+    });    
+}
+
+function restaurantDetails(msg, callback) {
+    Restaurant.findOne({ _id: msg.restaurantId }, function (err, result) {
+        if (err) {
+            console.log(err);
+            console.log("unable to read the database");
+            callback(err, "unable to read the database");
+        } else if (result) {
+            console.log("restaurant from mongoDB:", result);
+            callback(null, { status: 200, result});
+        } else {
+            callback(null, { status: 400 });
+        }
+    });
+}
+
 
 function buyerSignup(msg, callback) {
 
@@ -54,7 +91,7 @@ function buyerSignup(msg, callback) {
                         "buyerPassword": enPassword,
                         "buyerPhoneNumber": msg.body.buyerPhone,
                         "buyerAddress": msg.body.buyerAddress
-                       
+
                     }
                     //Save the user in database
                     Users.create(userData, function (err, user) {
@@ -87,22 +124,21 @@ function buyerSignIn(msg, callback) {
             crypt.compareHash(msg.body.buyerPassword, user.buyerPassword, function (err, isMatch) {
                 if (isMatch && !err) {
                     console.log("Login Successful");
-                    callback(null, {status: 200, user});
+                    callback(null, { status: 200, user });
                     console.log("creating token");
                 } else {
                     console.log("Authentication failed. Passwords did not match");
-                    callback(null, {status: 400});
+                    callback(null, { status: 400 });
                 }
             })
         } else {
-            callback(null, {status: 400});
+            callback(null, { status: 400 });
         }
     });
 
 }
 
 function ownerSignup(msg, callback) {
-
     console.log("In restaurant Signup topic service. Msg: ", msg);
     Restaurant.findOne({ retaurantEmail: msg.formatEmail }, function (err, rows) {
         if (err) {
@@ -118,15 +154,15 @@ function ownerSignup(msg, callback) {
                     enPassword = response;
                     console.log("Encrypted password: " + enPassword);
                     //var table = "buyerTable"
-                   // var role = (msg.body.isFaculty) ? "faculty" : "student";
+                    // var role = (msg.body.isFaculty) ? "faculty" : "student";
                     var userData = {
                         "restaurantName": msg.body.restaurantName,
                         "retaurantEmail": msg.formatEmail,
                         "restaurantPassword": enPassword,
                         "restaurantPhoneNumber": msg.body.restaurantPhone,
                         "restaurantAddress": msg.body.restaurantAddress,
-                        "cuisine":msg.body.restaurantCuisine
-                       
+                        "cuisine": msg.body.restaurantCuisine
+
                     }
                     //Save the user in database
                     Restaurant.create(userData, function (err, user) {
@@ -138,7 +174,7 @@ function ownerSignup(msg, callback) {
                             callback(null, { status: 200, user });
                         }
                     });
-                    
+
                 });
             }
         }
@@ -146,9 +182,8 @@ function ownerSignup(msg, callback) {
 }
 
 function ownerSignIn(msg, callback) {
-
     console.log("In owner login topic service. Msg: ", msg);
-    Restaurant.findOne({ retaurantEmail: msg.formatEmail}, function (err, user) {
+    Restaurant.findOne({ retaurantEmail: msg.formatEmail }, function (err, user) {
         if (err) {
             console.log(err);
             console.log("unable to read the database");
@@ -158,18 +193,16 @@ function ownerSignIn(msg, callback) {
             crypt.compareHash(msg.body.restaurantPassword, user.restaurantPassword, function (err, isMatch) {
                 if (isMatch && !err) {
                     console.log("Login Successful");
-                    callback(null, {status: 200, user});
+                    callback(null, { status: 200, user });
                     console.log("creating token");
                 } else {
                     console.log("Authentication failed. Passwords did not match");
-                    callback(null, {status: 400});
+                    callback(null, { status: 400 });
                 }
             })
         } else {
-            callback(null, {status: 400});
+            callback(null, { status: 400 });
         }
     });
 }
-
-
 //module.exports = router;

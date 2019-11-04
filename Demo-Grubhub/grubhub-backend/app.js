@@ -22,9 +22,6 @@ app.use(passport.initialize());
 
 // Bring in defined Passport Strategy
 require('./Config/passport').passport;
-
-
-
 var config = require('./config/settings');
 var mongoose = require('mongoose');
 //var connStr = config.database_type + '://' + config.database_username + ':' + config.database_password + '@' + config.database_host + ':' + config.database_port + '/' + config.database_name;
@@ -42,8 +39,10 @@ mongoose.connect(connStr, { useNewUrlParser: true,useUnifiedTopology: true, pool
 
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
 
-var loginSignup = require('./src/routes/loginSignup')
+var loginSignup = require('./src/routes/loginSignup.js')
 var menuItem = require('./src/routes/menuItemManage.js')
+var profilePage = require('./src/routes/ProfileUpdate.js');
+var orderManage = require('./src/routes/orderManage.js');
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads/')));
 
@@ -62,7 +61,6 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
-
 app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
     res.setHeader('Access-Control-Allow-Credentials', 'true');
@@ -81,6 +79,6 @@ app.use(bodyParser.urlencoded({
 
  app.use(bodyParser.json());
  app.use('/', loginSignup);
- app.use('/', menuItem)
-
-
+ app.use('/', menuItem);
+ app.use('/', profilePage);
+ app.use('/', orderManage);

@@ -21,7 +21,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         this.state = {
             restaurantName: "",
             restaurantId: 0,
-            restaurantEmailId: "",
+            restaurantEmail: "",
             restaurantAddress: "",
             restaurantPhone: 0,
             restaurantCusine: "",
@@ -35,6 +35,7 @@ export class BuyerRestaurantDetailsPage extends Component {
             showPlaceOrderModal: false,
             items: [],
             sections: [],
+            orderId: undefined,
         }
 
         this.launchQuantitySelector = this.launchQuantitySelector.bind(this);
@@ -90,10 +91,10 @@ export class BuyerRestaurantDetailsPage extends Component {
 
     componentDidMount() {
         let restaurantId = this.props.location.state.restaurantId;
-        let buyerId = cookie.load('cookie2');
-        console.log("Getting details of restaurant with ID: " + restaurantId);
+        let buyerId = cookie.load('cookie1');
+        // debugger;
         axios.defaults.withCredentials = true;
-
+        console.log("Getting details of buyer with ID: " + buyerId);
         axios.get('http://localhost:3001/buyerDetails', {
             params: {
                 buyerId: buyerId,
@@ -106,9 +107,10 @@ export class BuyerRestaurantDetailsPage extends Component {
                 if (buyerDetails) {
                     this.setState({
                         buyerName: buyerDetails.buyerName,
-                        buyerEmailId: buyerDetails.buyerEmailId,
+                        buyerEmailId: buyerDetails.buyerEmail,
                         buyerAddress: buyerDetails.buyerAddress,
-                    })
+                        buyerId: buyerDetails._id,
+                        })
                 }
             } else {
                 console.log("Status Code: ", response.status);
@@ -118,6 +120,7 @@ export class BuyerRestaurantDetailsPage extends Component {
 
         });
 
+        console.log("Getting details of restaurant with ID: " + restaurantId);
         axios.get('http://localhost:3001/restaurantDetails', {
             params: {
                 restaurantId: restaurantId,
@@ -130,11 +133,11 @@ export class BuyerRestaurantDetailsPage extends Component {
                 if (restaurantDetails) {
                     this.setState({
                         restaurantName: restaurantDetails.restaurantName,
-                        restaurantEmailId: restaurantDetails.restaurantEmailId,
+                        restaurantEmail: restaurantDetails.restaurantEmail,
                         restaurantAddress: restaurantDetails.restaurantAddress,
-                        restaurantCuisine: restaurantDetails.restaurantCuisine,
-                        restaurantPhone: restaurantDetails.restaurantPhone,
-                        restaurantId: restaurantDetails.restaurantId,
+                        restaurantCuisine: restaurantDetails.cuisine,
+                        restaurantPhone: restaurantDetails.restaurantPhoneNumber,
+                        restaurantId: restaurantDetails._id,
                     })
                 }
             } else {
@@ -171,7 +174,7 @@ export class BuyerRestaurantDetailsPage extends Component {
 
     /**
  * Order Summary:
- * RestaurantName, RestaurantEmailId, Restaurant Address
+ * RestaurantName, restaurantEmail, Restaurant Address
  * BuyerName, BuyerAddress, BuyerAddress
  * Status of Order for Buyer
  * All the items and corresponding quantity
@@ -187,27 +190,27 @@ export class BuyerRestaurantDetailsPage extends Component {
     // restaurant E-Mail Id
     placeOrder = (completeOrder) => {
         console.log("Handling place order");
+        console.log(this.state);
         const data = {
-            restaurantEmailId: this.state.restaurantEmailId,
+            restaurantEmail: this.state.restaurantEmail,
             restaurantId: this.state.restaurantId,
             buyerEmailId: this.state.buyerEmailId,
             buyerAddress: this.state.buyerAddress,
             cartItems: this.state.cartItems,
             buyerName: this.state.buyerName,
+            restaurantId : this.state.restaurantId,
+            buyerId : this.state.buyerId,
+            restaurantOrderStatus : "New",
+            buyerOrderStatus : "Upcoming",
+            totalPrice : completeOrder.netPrice,
         }
+        console.log("order data:");
+        console.log(data);
         axios.post('http://localhost:3001/postOrder', data)
             .then(response => {
                 if (response.status === 200) {
-                    let menu = response.data.menu;
-                    let restaurantDetails = response.data.restaurantDetails;
-                    let index = 0;
-
                     this.setState({
-                        restaurantId: restaurantDetails.restaurantId,
-                        restaurantEmailId: restaurantDetails.restaurantEmailId,
-                        restaurantName: restaurantDetails.restaurantName,
-                        restaurantCuisine: restaurantDetails.restaurantCuisine,
-                        restaurantPhone: restaurantDetails.restaurantPhone,
+                        orderId: response.data.orderId,
                     })
                 } else {
                     console.log("Status Code: ", response.status);
@@ -216,6 +219,7 @@ export class BuyerRestaurantDetailsPage extends Component {
             }).catch(error => {
                 console.log(error);
             });
+            
         console.log("Printing Complete Order")
         console.log(completeOrder);
         this.setState({
@@ -261,7 +265,7 @@ export class BuyerRestaurantDetailsPage extends Component {
                 let aMenuItem = menuItems[menuItemIndex];
                 if (aMenuItem.itemSection === sections[sectionIndex]) {
                     sectionData.push(
-                        <ListGroup.Item action eventKey={menuItemIndex} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={(e) => {
+                        <ListGroup.Item action key={menuItemIndex} onMouseOver={this.onMouseOver} onMouseOut={this.onMouseOut} onClick={(e) => {
                             this.launchQuantitySelector(e, menuItems[menuItemIndex])
                         }} style={listGroupStyle}>
                             <MenuItemCard itemName={menuItems[menuItemIndex].itemName} itemPrice={menuItems[menuItemIndex].itemPrice} />

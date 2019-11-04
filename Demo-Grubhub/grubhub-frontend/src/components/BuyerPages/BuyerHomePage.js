@@ -58,10 +58,6 @@ export class BuyerHomePage extends Component {
                     let index = 0;
                     for (index = 0; index < matchedItems.length; index++) {
                         searchResults.push(matchedItems[index]);
-                        // this.setState({
-                        //     // searchResults: this.state.searchResults.concat(matchedItems[index])
-                        //     sea
-                        // })
                     }
                     this.setState({
                         searchResults: searchResults,
