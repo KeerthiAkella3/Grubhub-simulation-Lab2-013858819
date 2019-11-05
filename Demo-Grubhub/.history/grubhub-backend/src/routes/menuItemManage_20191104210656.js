@@ -16,7 +16,7 @@ var kafka = require('../kafka/client');
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, '');
+    callback(null, './uploads/profilePictures');
   },
   filename: (req, file, callback) => {
     fileExtension = file.originalname.split('.')[1];
@@ -52,16 +52,15 @@ router.get('/menu', function (req, res) {
           
           console.log("anItem.items.length")
           console.log(anItem.items.length)
-
           for (var j = 0; j < anItem.items.length; j++) {
             let imageFilepath = undefined;
             let base64Image = undefined;
-            if (anItem.items[j].restaurantImg === null || anItem.items[j].restaurantImg === undefined || anItem.items[j].restaurantImg.length === 0) {
+            if (anItem.menuItemImage === null || anItem.menuItemImage === undefined || anItem.menuItemImage.length === 0) {
               // res.status(400).json({ responseMessage: 'Record not found' });
               console.log('No Image found for this item');
-            } else if (typeof anItem.items[j].restaurantImg === "string") {
-              console.log(anItem.items[j].restaurantImg);
-              imageFilepath = path.join(__dirname, "../uploads/profilePictures", anItem.items[j].restaurantImg);
+            } else if (typeof anItem.menuItemImage === "string") {
+              console.log(anItem.menuItemImage);
+              imageFilepath = path.join(__dirname, "../uploads/profilePictures", anItem.menuItemImage);
               console.log("file path.." + imageFilepath);
             } else {
               console.log('invalid image');

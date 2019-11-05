@@ -140,7 +140,7 @@ function buyerSignIn(msg, callback) {
 
 function ownerSignup(msg, callback) {
     console.log("In restaurant Signup topic service. Msg: ", msg);
-    Restaurant.findOne({ restaurantEmail: msg.formatEmail }, function (err, rows) {
+    Restaurant.findOne({ retaurantEmail: msg.formatEmail }, function (err, rows) {
         if (err) {
             console.log(err);
             console.log("unable to read the database");
@@ -184,9 +184,7 @@ function ownerSignup(msg, callback) {
 function ownerSignIn(msg, callback) {
     console.log("In owner login topic service. Msg: ", msg);
     Restaurant.findOne({ restaurantEmail: msg.formatEmail }, function (err, user) {
-        
         if (err) {
-            
             console.log(err);
             console.log("unable to read the database");
             callback(err, "unable to read the database");

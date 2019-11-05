@@ -184,9 +184,9 @@ function ownerSignup(msg, callback) {
 function ownerSignIn(msg, callback) {
     console.log("In owner login topic service. Msg: ", msg);
     Restaurant.findOne({ restaurantEmail: msg.formatEmail }, function (err, user) {
-        
+        console.log("lopalaki")
         if (err) {
-            
+            console.log("error kaadu")
             console.log(err);
             console.log("unable to read the database");
             callback(err, "unable to read the database");

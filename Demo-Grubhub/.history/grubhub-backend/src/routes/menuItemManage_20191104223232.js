@@ -16,7 +16,7 @@ var kafka = require('../kafka/client');
 
 const storage = multer.diskStorage({
   destination: (req, file, callback) => {
-    callback(null, '');
+    callback(null, './uploads/profilePictures');
   },
   filename: (req, file, callback) => {
     fileExtension = file.originalname.split('.')[1];
