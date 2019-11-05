@@ -30,11 +30,10 @@ export class OrderBrief extends Component {
         let anOrderData = this.state.anOrderData;
         axios.delete('http://localhost:3001/deleteOrder', {
             params: {
-                uniqueOrderId: anOrderData.uniqueOrderId,
+                uniqueOrderId: anOrderData._id,
             }
         }).then(response => {
-            console.log("Response on buyer details: ");
-            console.log(response.data.buyerDetails);
+            console.log("Response on delete order");
             if (response.status === 200) {
                 console.log("Successfully deleted Order");
             } else {
@@ -56,7 +55,7 @@ export class OrderBrief extends Component {
         axios.defaults.withCredentials = true;
         axios.post('http://localhost:3001/updateOrder', 
             {
-                uniqueOrderId: anOrderData.uniqueOrderId,
+                uniqueOrderId: anOrderData._id,
                 nextStatus: nextStatus,
             }
         ).then(response => {
@@ -88,6 +87,7 @@ export class OrderBrief extends Component {
         let listGroupStyle = {
             paddingTop: "5px",
             paddingBottom: "5px",
+            paddingRight: "2px",
         }
 
         console.log("In order brief page");
@@ -98,25 +98,28 @@ export class OrderBrief extends Component {
         let netTotalPrice = 0.0;
         let orderItemsDOM = [];
         let index = 0;
-        for (index = 0; index < anOrderData.orderItemsInfo.length; index++) {
+        for (index = 0; index < anOrderData.items.length; index++) {
             console.log("Going through various items in order");
-            console.log(anOrderData.orderItemsInfo[index]);
-            netTotalPrice = eval(netTotalPrice + anOrderData.orderItemsInfo[index].itemTotalPrice);
+            console.log(anOrderData.items[index]);
+            netTotalPrice = anOrderData.totalPrice;
             orderItemsDOM.push(
-                <div style={{ width: "100%", height: "100%" }}>
-                    <ListGroup.Item eventKey={index} disabled style={listGroupStyle}>
-                        <h3>Name: {anOrderData.orderItemsInfo[index].itemName}</h3>
+                <div key = {index} style={{ width: "100%", height: "100%" }}>
+                    <ListGroup.Item key={index} disabled style={listGroupStyle}>
+                        <h3>Name: {anOrderData.items[index].itemName}</h3>
                         <Container style={{
                             maxWidth: "100%",
                             width: "100%",
                             height: "100%",
                         }}>
                             <Row>
-                                <Col sm={11}>
-                                    Quantity: {anOrderData.orderItemsInfo[index].itemQuantity}
+                                <Col sm={10}>
+                                    Quantity: {anOrderData.items[index].itemQuantity}
                                 </Col>
-                                <Col sm={1}>
-                                    Price:{anOrderData.orderItemsInfo[index].itemTotalPrice}
+                                <Col sm={2} style={{
+                                    // marginRight: "2px",
+                                    textAlign: "end",   
+                                }}>
+                                    Price: USD {anOrderData.items[index].itemTotalPrice}
                                 </Col>
                             </Row>
                         </Container>
@@ -136,7 +139,7 @@ export class OrderBrief extends Component {
                 nextStatus = "Delivered";
             }
             orderButtonDOM.push(
-                <Row>
+                <Row key={0}>
                     <Col sm={10}>
                         <Button variant="danger" onClick={this.cancelOrder}> Cancel Order </Button>
                     </Col>
@@ -159,17 +162,17 @@ export class OrderBrief extends Component {
                     {/* <Card.Header>Header</Card.Header> */}
                     <Card.Body>
                         <Card.Title>{buyerName}</Card.Title>
-                        <Card.Text>
+                        {/* <Card.Text> */}
                             {buyerAddress}
-                        </Card.Text>
-                        <Card.Text>
+                        {/* </Card.Text> */}
+                        {/* <Card.Text> */}
                             {orderItemsDOM}
-                        </Card.Text>
+                        {/* </Card.Text> */}
                         <Card.Text style={{
-                            textAlignLast: "right",
-                            paddingRight: "25px",
+                            textAlign: "end",
+                            fontWeight: "900",
                         }}>
-                            Total Price: {parseFloat(netTotalPrice).toFixed(2)}
+                            Total Price: USD {parseFloat(netTotalPrice).toFixed(2)}
                         </Card.Text>
                         <Container style={{
                             width: "100%",

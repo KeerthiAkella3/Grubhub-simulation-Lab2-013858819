@@ -76,7 +76,7 @@ export class ListOrdersPage extends Component {
         for (let index = 0; index < listOfAllOrders.length; index++) {
             let anOrderData = listOfAllOrders[index];
             listGroupOrders.push(
-                <OrderBrief anOrderData={anOrderData} orderStatus={this.state.orderStatus}/>
+                <OrderBrief key={index} anOrderData={anOrderData} orderStatus={this.state.orderStatus}/>
             );
         }
 

@@ -192,16 +192,17 @@ export class BuyerRestaurantDetailsPage extends Component {
         console.log("Handling place order");
         console.log(this.state);
         const data = {
-            restaurantEmail: this.state.restaurantEmail,
-            restaurantId: this.state.restaurantId,
             buyerEmailId: this.state.buyerEmailId,
             buyerAddress: this.state.buyerAddress,
-            cartItems: this.state.cartItems,
             buyerName: this.state.buyerName,
-            restaurantId : this.state.restaurantId,
             buyerId : this.state.buyerId,
-            restaurantOrderStatus : "New",
             buyerOrderStatus : "Upcoming",
+            restaurantName: this.state.restaurantName,
+            restaurantId : this.state.restaurantId,
+            restaurantEmail: this.state.restaurantEmail,
+            restaurantAddress: this.state.restaurantAddress,
+            restaurantOrderStatus : "New",
+            cartItems: this.state.cartItems,
             totalPrice : completeOrder.netPrice,
         }
         console.log("order data:");
@@ -309,7 +310,6 @@ export class BuyerRestaurantDetailsPage extends Component {
         // Cart symbol that updates with each item
         // Place Order button 
         // Similar to grubhub page
-
         return (
             <div>
                 <BuyerNavBar />

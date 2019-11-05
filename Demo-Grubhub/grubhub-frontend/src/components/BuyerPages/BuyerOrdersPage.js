@@ -23,8 +23,8 @@ export class BuyerOrdersPage extends Component {
     componentDidMount = () => {
         // get order details of this buyer
         // and render it
-        let buyerEmailId = cookie.load('cookie1');
-        let buyerId = cookie.load('cookie2');
+        let buyerId = cookie.load('cookie1');
+        let buyerEmailId = cookie.load('cookie3');
         axios.get('http://localhost:3001/getBuyerOrder', {
             params: {
                 buyerEmailId: buyerEmailId,
@@ -56,11 +56,11 @@ export class BuyerOrdersPage extends Component {
                 let anOrderData = listOfAllOrders[index];
                 if (anOrderData.buyerOrderStatus === "Past" || anOrderData.buyerOrderStatus === "Rejected") {
                     pastListGroupOrders.push(
-                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} />
+                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index}/>
                     );
                 } else {
                     upcomingListGroupOrders.push(
-                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} />
+                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index}/>
                     )
                 }
             }

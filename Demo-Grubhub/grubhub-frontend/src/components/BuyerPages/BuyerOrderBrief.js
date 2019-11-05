@@ -32,10 +32,11 @@ export class BuyerOrderBrief extends Component {
         let restaurantName = orderData.restaurantName;
         let restaurantAddress = orderData.restaurantAddress;
         let restaurantOrderStatus = orderData.restaurantOrderStatus;
-        let uniqueOrderId = orderData.uniqueOrderId;
-        let orderItemsInfo = orderData.orderItemsInfo;
+        let uniqueOrderId = orderData._id;
+        let orderItemsInfo = orderData.items;
+        let totalPrice = orderData.totalPrice;
         let itemInfoDOM = [];
-        let totalPrice = 0.0;
+        
         console.log('items in order from db')
         console.log(orderItemsInfo);
         for (let index = 0; orderItemsInfo !== undefined && index < orderItemsInfo.length; index++) {
@@ -43,13 +44,13 @@ export class BuyerOrderBrief extends Component {
             console.log(anItem);
             if (anItem !== undefined) {
                 itemInfoDOM.push(
-                    <Card.Text>
-                        <p>Name : {anItem.itemName},</p>
-                        <p>Quantity: {anItem.itemQuantity},</p>
-                        <p>Price: {anItem.itemTotalPrice},</p>
+                    <Card.Text key={index}>
+                        Name : {anItem.itemName},<br/>
+                        Quantity: {anItem.itemQuantity},<br/>
+                        Price: {anItem.itemTotalPrice},<br/>
                     </Card.Text>
                 );
-                totalPrice = parseFloat(eval(totalPrice + parseFloat(anItem.itemTotalPrice))).toFixed(2);
+                // totalPrice = parseFloat(eval(totalPrice + parseFloat(anItem.itemTotalPrice))).toFixed(2);
             }
         }
         return (
@@ -69,9 +70,11 @@ export class BuyerOrderBrief extends Component {
                     {itemInfoDOM}
                     <Card.Footer style={{
                         fontWeight: "500",
+                        backgroundColor: "#e6f2ff",
+                        fontWeight: "500",
                     }}>
                         Total Cost of Order: {totalPrice}<br/>
-                        Order Status: {restaurantOrderStatus}
+                        Order Status: <b>{restaurantOrderStatus}</b>
                     </Card.Footer>
                 </Card.Body>
             </Card>
