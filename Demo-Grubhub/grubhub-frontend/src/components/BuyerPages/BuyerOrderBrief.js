@@ -36,7 +36,7 @@ export class BuyerOrderBrief extends Component {
         let uniqueOrderId = this.state.orderData._id;
         let messagesToBuyer = undefined;
         let messagesToOwner = undefined;
-        axios.get('http://localhost:3001/getMessages', {
+        axios.get('http://3.133.92.239:3001/getMessages', {
             params: {
                 buyerId: buyerId,
                 restaurantId: restaurantId,
@@ -74,7 +74,7 @@ export class BuyerOrderBrief extends Component {
             uniqueOrderId: this.state.orderData._id,
             message: message,
         }
-        axios.post('http://localhost:3001/sendMessageToOwner', data)
+        axios.post('http://3.133.92.239:3001/sendMessageToOwner', data)
             .then(response => {
                 if (response.status === 200) {
                     console.log('Successfully saved conversation!');

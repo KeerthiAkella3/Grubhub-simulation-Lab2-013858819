@@ -52,7 +52,7 @@ export class MenuPage extends Component {
         let restaurantDetails = {};
         console.log("Getting details of restaurant with ID: " + restaurantId);
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/menu', {
+        axios.get('http://3.133.92.239:3001/menu', {
             params: {
                 restaurantId: restaurantId
             }
@@ -95,7 +95,7 @@ export class MenuPage extends Component {
             let anItem = items[itemIndex];
             if (anItem.itemSection === sectionName) {
                 axios.defaults.withCredentials = true;
-                axios.delete('http://localhost:3001/restaurantMenu', {
+                axios.delete('http://3.133.92.239:3001/restaurantMenu', {
                     params: {
                         menuItemId: anItem.itemId,
                     }
@@ -118,7 +118,7 @@ export class MenuPage extends Component {
         console.log("in state")
         console.log(restaurantId)
         axios.defaults.withCredentials = true;
-        axios.delete('http://localhost:3001/restaurantSection', {
+        axios.delete('http://3.133.92.239:3001/restaurantSection', {
             params: {
                 restaurantId: restaurantId,
                 sectionName: sectionName,
@@ -134,7 +134,7 @@ export class MenuPage extends Component {
 
                 // refresh state with existing items
                 axios.defaults.withCredentials = true;
-                axios.get('http://localhost:3001/menu', {
+                axios.get('http://3.133.92.239:3001/menu', {
                     params: {
                         restaurantId: restaurantId
                     }
@@ -180,7 +180,7 @@ export class MenuPage extends Component {
         let menu = [];
         let sections = [];
         axios.defaults.withCredentials = true;
-        axios.delete('http://localhost:3001/restaurantMenu', {
+        axios.delete('http://3.133.92.239:3001/restaurantMenu', {
             params: {
                 menuItemId: itemId,
             }
@@ -200,7 +200,7 @@ export class MenuPage extends Component {
 
             // refresh state with existing items
             axios.defaults.withCredentials = true;
-            axios.get('http://localhost:3001/menu', {
+            axios.get('http://3.133.92.239:3001/menu', {
                 params: {
                     restaurantId: restaurantId
                 }
@@ -240,7 +240,7 @@ export class MenuPage extends Component {
         console.log("restaurant Id")
         console.log(restaurantId)
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/restaurantSection', {
+        axios.post('http://3.133.92.239:3001/restaurantSection', {
             restaurantId: restaurantId,
             sectionName: sectionName,
         }).then(response => {
@@ -288,7 +288,7 @@ export class MenuPage extends Component {
         console.log(data)
         axios({
             method: 'post',
-            url: 'http://localhost:3001/img/upload ',
+            url: 'http://3.133.92.239:3001/img/upload ',
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
@@ -300,7 +300,7 @@ export class MenuPage extends Component {
                 itemImageFileName = response.data.filename;
                 data.menuItemImage = itemImageFileName;
 
-                axios.post('http://localhost:3001/restaurantMenu', data)
+                axios.post('http://3.133.92.239:3001/restaurantMenu', data)
                     .then(response => {
                         if (response.status === 200) {
                             console.log('successfully added menu item to restaurants menu' + response.data.menuItemUniqueId);
@@ -325,7 +325,7 @@ export class MenuPage extends Component {
 
                             // refresh state with existing items
                             axios.defaults.withCredentials = true;
-                            axios.get('http://localhost:3001/menu', {
+                            axios.get('http://3.133.92.239:3001/menu', {
                                 params: {
                                     restaurantId: restaurantId
                                 }

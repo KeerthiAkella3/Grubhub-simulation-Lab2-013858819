@@ -50,7 +50,7 @@ class OwnerSignInForm extends Component {
         console.log("data is..")
         console.log(data);
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/ownerSignIn', data)
+        axios.post('http://3.133.92.239:3001/ownerSignIn', data)
             .then(response => {
                 console.log("Status Code : ", response.status);
                 console.log("Response from Sign Up " + response);

@@ -44,7 +44,7 @@ export class BuyerHomePage extends Component {
         e.preventDefault();
         axios.defaults.withCredentials = true;
         //make a post request with the user data
-        axios.get('http://localhost:3001/menuItem', {
+        axios.get('http://3.133.92.239:3001/menuItem', {
             params: {
                 menuItemName: this.state.searchItemName,
             }

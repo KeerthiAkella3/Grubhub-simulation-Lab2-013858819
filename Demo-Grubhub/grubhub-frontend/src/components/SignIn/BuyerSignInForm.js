@@ -90,7 +90,7 @@ class BuyerSignInForm extends Component {
         console.log(data);
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/buyerLogin', data)
+        axios.post('http://3.133.92.239:3001/buyerLogin', data)
             .then(response => {
                 console.log("Status Code : ", response.status);
                 console.log("Response from Sign Up " + response);

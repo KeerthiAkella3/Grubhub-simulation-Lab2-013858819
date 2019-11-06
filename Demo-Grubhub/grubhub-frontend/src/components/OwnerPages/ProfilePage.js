@@ -35,7 +35,7 @@ export class ProfilePage extends Component {
             
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/restaurantDetails',
+                url: 'http://3.133.92.239:3001/restaurantDetails',
                 params: { restaurantId: cookie.load('cookie1') },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })
@@ -61,7 +61,7 @@ export class ProfilePage extends Component {
 
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/profile/img',
+                url: 'http://3.133.92.239:3001/profile/img',
                 params: { "id": restaurantId, "table": "restaurantTable" },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })
@@ -100,7 +100,7 @@ export class ProfilePage extends Component {
         axios.defaults.withCredentials = true;
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/img/upload ',
+            url: 'http://3.133.92.239:3001/img/upload ',
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
@@ -115,7 +115,7 @@ export class ProfilePage extends Component {
                 alert(responseData.responseMessage);
                 axios({
                     method: 'get',
-                    url: 'http://localhost:3001/profile/img',
+                    url: 'http://3.133.92.239:3001/profile/img',
                     params: { "id": restaurantId, "table": "restaurantTable" },
                     config: { headers: { 'Content-Type': 'application/json' } }
                 })
@@ -152,7 +152,7 @@ export class ProfilePage extends Component {
         const formData = new FormData(event.target);
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/updateOwner',
+            url: 'http://3.133.92.239:3001/updateOwner',
             data: {
                 "restaurantEmailId": restaurantEmailId, "table": "restaurantTable",
                 "restaurantName": formData.get('restaurantName'),

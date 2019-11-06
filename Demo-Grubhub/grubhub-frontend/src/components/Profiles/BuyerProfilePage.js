@@ -40,7 +40,7 @@ export class BuyerProfilePage extends Component {
 
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/img/upload ',
+            url: 'http://3.133.92.239:3001/img/upload ',
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
@@ -55,7 +55,7 @@ export class BuyerProfilePage extends Component {
                 alert(responseData.responseMessage);
                 axios({
                     method: 'get',
-                    url: 'http://localhost:3001/profile/img',
+                    url: 'http://3.133.92.239:3001/profile/img',
                     params: { "id": buyerId, "table": "buyerTable" },
                     config: { headers: { 'Content-Type': 'application/json' } }
                 })
@@ -99,7 +99,7 @@ export class BuyerProfilePage extends Component {
 
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/buyerDetails',
+                url: 'http://3.133.92.239:3001/buyerDetails',
                 params: { "buyerId": buyerId },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })
@@ -129,7 +129,7 @@ export class BuyerProfilePage extends Component {
 
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/profile/img',
+                url: 'http://3.133.92.239:3001/profile/img',
                 params: { "id": buyerId, "table": "buyerTable" },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })
@@ -163,7 +163,7 @@ export class BuyerProfilePage extends Component {
         console.log("Data " + formData.get('buyerName'))
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/updateBuyerProfile',
+            url: 'http://3.133.92.239:3001/updateBuyerProfile',
             data: {
                 "buyerEmailId": buyerEmailId,
                 "buyerName": formData.get('buyerName'),

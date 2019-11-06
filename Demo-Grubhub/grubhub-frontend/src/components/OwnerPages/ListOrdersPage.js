@@ -41,7 +41,7 @@ export class ListOrdersPage extends Component {
         console.log("Asking backend for details on restaurant with ID = " + restaurantId + " and with status = " + statusOfAllOrders);
         // e.preventDefault();
         axios.defaults.withCredentials = true;
-        axios.get('http://localhost:3001/restaurantOrders', {
+        axios.get('http://3.133.92.239:3001/restaurantOrders', {
             params: {
                 restaurantId: restaurantId,
                 orderStatus: statusOfAllOrders,

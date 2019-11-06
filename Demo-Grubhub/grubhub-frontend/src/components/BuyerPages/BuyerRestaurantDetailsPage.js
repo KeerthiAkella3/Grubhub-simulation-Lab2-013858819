@@ -95,7 +95,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         // debugger;
         axios.defaults.withCredentials = true;
         console.log("Getting details of buyer with ID: " + buyerId);
-        axios.get('http://localhost:3001/buyerDetails', {
+        axios.get('http://3.133.92.239:3001/buyerDetails', {
             params: {
                 buyerId: buyerId,
             }
@@ -121,7 +121,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         });
 
         console.log("Getting details of restaurant with ID: " + restaurantId);
-        axios.get('http://localhost:3001/restaurantDetails', {
+        axios.get('http://3.133.92.239:3001/restaurantDetails', {
             params: {
                 restaurantId: restaurantId,
             }
@@ -149,7 +149,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         });
 
 
-        axios.get('http://localhost:3001/menu', {
+        axios.get('http://3.133.92.239:3001/menu', {
             params: {
                 restaurantId: restaurantId
             }
@@ -207,7 +207,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         }
         console.log("order data:");
         console.log(data);
-        axios.post('http://localhost:3001/postOrder', data)
+        axios.post('http://3.133.92.239:3001/postOrder', data)
             .then(response => {
                 if (response.status === 200) {
                     this.setState({

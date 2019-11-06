@@ -83,7 +83,7 @@ class OwnerProfileForm extends Component {
         })
 
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/ownerSignup', data)
+        axios.post('http://3.133.92.239:3001/ownerSignup', data)
             .then(response => {
                 console.log("frontend")
                 console.log("Status Code : ", response.status);

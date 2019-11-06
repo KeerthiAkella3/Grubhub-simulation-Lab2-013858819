@@ -36,7 +36,7 @@ export class OrderBrief extends Component {
 
     cancelOrder = () => {
         let anOrderData = this.state.anOrderData;
-        axios.delete('http://localhost:3001/deleteOrder', {
+        axios.delete('http://3.133.92.239:3001/deleteOrder', {
             params: {
                 uniqueOrderId: anOrderData._id,
             }
@@ -63,7 +63,7 @@ export class OrderBrief extends Component {
         let uniqueOrderId = this.state.anOrderData._id;
         let messagesToBuyer = undefined;
         let messagesToOwner = undefined;
-        axios.get('http://localhost:3001/getMessages', {
+        axios.get('http://3.133.92.239:3001/getMessages', {
             params: {
                 buyerId: buyerId,
                 restaurantId: restaurantId,
@@ -99,7 +99,7 @@ export class OrderBrief extends Component {
             uniqueOrderId: this.state.anOrderData._id,
             message: message,
         }
-        axios.post('http://localhost:3001/sendMessageToBuyer', data)
+        axios.post('http://3.133.92.239:3001/sendMessageToBuyer', data)
             .then(response => {
                 if (response.status === 200) {
                     console.log('Successfully saved conversation!');
@@ -127,7 +127,7 @@ export class OrderBrief extends Component {
         let anOrderData = this.state.anOrderData;
         e.preventDefault();
         axios.defaults.withCredentials = true;
-        axios.post('http://localhost:3001/updateOrder',
+        axios.post('http://3.133.92.239:3001/updateOrder',
             {
                 uniqueOrderId: anOrderData._id,
                 nextStatus: nextStatus,

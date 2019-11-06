@@ -38,7 +38,7 @@ class OwnerPicture extends Component {
             console.log(name);
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/profile/img',
+                url: 'http://3.133.92.239:3001/profile/img',
                 params: { "id": id, "table": "restaurantTable" },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })
@@ -90,7 +90,7 @@ class OwnerPicture extends Component {
 
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/img/upload ',
+            url: 'http://3.133.92.239:3001/img/upload ',
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })
@@ -105,7 +105,7 @@ class OwnerPicture extends Component {
                 alert(responseData.responseMessage);
                 axios({
                     method: 'get',
-                    url: 'http://localhost:3001/profile/img',
+                    url: 'http://3.133.92.239:3001/profile/img',
                     params: { "id": id, "table": "restaurantTable" },
                     config: { headers: { 'Content-Type': 'application/json' } }
                 })
@@ -145,7 +145,7 @@ class OwnerPicture extends Component {
 
         await axios({
             method: 'post',
-            url: 'http://localhost:3001/img/upload',
+            url: 'http://3.133.92.239:3001/img/upload',
             data: formData,
             config: { headers: { 'Content-Type': 'multipart/form-data' } }
         })

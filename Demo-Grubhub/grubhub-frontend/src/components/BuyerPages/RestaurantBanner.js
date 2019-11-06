@@ -22,7 +22,7 @@ export class RestaurantBanner extends Component {
         if (restaurantId) {
             axios({
                 method: 'get',
-                url: 'http://localhost:3001/profile/img',
+                url: 'http://3.133.92.239:3001/profile/img',
                 params: { "id": restaurantId, "table": "restaurantTable" },
                 config: { headers: { 'Content-Type': 'application/json' } }
             })

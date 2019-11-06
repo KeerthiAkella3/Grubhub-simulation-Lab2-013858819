@@ -28,7 +28,7 @@ export class BuyerOrdersPage extends Component {
         // and render it
         let buyerId = cookie.load('cookie1');
         let buyerEmailId = cookie.load('cookie3');
-        axios.get('http://localhost:3001/getBuyerOrder', {
+        axios.get('http://3.133.92.239:3001/getBuyerOrder', {
             params: {
                 buyerEmailId: buyerEmailId,
             }

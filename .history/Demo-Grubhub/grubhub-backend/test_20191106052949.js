@@ -11,7 +11,7 @@ var testInput_password = "test";
 
    // Buyer sign In
     it("Test Case 1 - Buyer Sign in post method.", (done) => {
-        chai.request('http://3.133.92.239:3001')
+        chai.request('http://localhost:3001')
         .post(`/buyerLogin`)
         .send({emailId: "buyer@gmail.com",password : "1234"})
         .end((err, res) => {
@@ -25,7 +25,7 @@ var testInput_password = "test";
 
     
     it("Test Case 2 - Restaurent Owner Signin in post method.", (done) => {
-        chai.request('http://3.133.92.239:3001')
+        chai.request('http://localhost:3001')
         .post(`/ownerSignIn`)
         .send({emailId: "admin",password : "admin"})
         .end((err, res) => {
@@ -38,7 +38,7 @@ var testInput_password = "test";
     })
 
     it("Test Case 3 - Buryer update post method.", (done) => {
-        chai.request('http://3.133.92.239:3001')
+        chai.request('http://localhost:3001')
         .post(`/updateProfile`)
         .send({buyerName: 'Kee', Address: '245 W, CA', phoneNumber: '123',
          table: "buyerTable", emailId: "admin",id : "41"})
@@ -52,7 +52,7 @@ var testInput_password = "test";
     })
 
     it("Test Case 4 - Owner update post method.", (done) => {
-        chai.request('http://3.133.92.239:3001')
+        chai.request('http://localhost:3001')
         .post(`/updateOwner`)
         .send({ownerName: 'Kee', Address: '245 W, CA', phoneNumber: '123', 
         restaurentName: "Dusita", cuisine: "Thai",
@@ -67,7 +67,7 @@ var testInput_password = "test";
     })
 
     it("Test Case 5 - Buyer Sign up post method.", (done) => {
-        chai.request('http://3.133.92.239:3001')
+        chai.request('http://localhost:3001')
         .post(`/buyerSignUp`)
         .send({buyerName: "John",
         emailId: "faa@gmail.com",
