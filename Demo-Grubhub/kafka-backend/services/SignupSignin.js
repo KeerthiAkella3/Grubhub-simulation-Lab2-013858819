@@ -67,9 +67,9 @@ exports.loginSignupService = function loginSignupService(msg, callback) {
             break;
 
 
-        case "uploadItemPicture":
-            uploadItemPicture(msg, callback);
-            break;
+        // case "uploadItemPicture":
+        //     uploadItemPicture(msg, callback);
+        //     break;
 
         case "getItemPicture":
             getItemPicture(msg, callback);
@@ -413,62 +413,62 @@ function getBuyerPicture(msg, callback) {
 }
 
 
-function uploadItemPicture(msg, callback) {
-    console.log("In uploadItemPicture profile pic. Msg: ", msg);
-    console.log("id")
-    console.log(msg.body.id)
-    filename = msg.filename
-    let updatedItems = [];
-    let updatedSections = [];
-    console.log("Inside post profile img in kafka")
-    console.log(filename)
-    Restaurant.findOne({ '_id': msg.body.id, 'sections': {'items' : {'itemName' : msg.body.itemName}}}, 
-    function (err, results) {
-        console.log(results)
-        if (results) {
-            console.log("Yaay restaurant");
-            results.sections.forEach(function (section) {
-                if (section["sectionName"] == msg.body.sectionName) {
-                    console.log(section.items)
-                    if (section.items.length !== 0) {
-                        let itemIndex = 0;
-                        let sectionItemList = section.items;
-                        for (itemIndex = 0; itemIndex < sectionItemList.length; itemIndex++) {
-                            var anItem = sectionItemList[itemIndex];
-                            if (anItem.itemName === msg.body.itemName) {
-                                console.log("equal")
-                                console.log(anItem.itemName)
-                                console.log(anItem.itemImg)
-                                console.log(filename)
-                                anItem.itemImg = filename;
-                            }
-                            updatedItems.push(anItem);
-                        }
-                    } 
-                }
-                updatedSections.push(section);
-                resuts.markModified("sections");
-                results.save(function (err) {
-                if (!err) {
-                    callback(null, { status: 200, message: "item is added successfully!!" });
-                } else {
-                    callback(null, { status: 200, message: "item not added!!" });
-                }
-      });
-            })
-        } else {
-            console.log(err);
-            console.log("unable to read the database");
-            callback(err, "Database Error");
-        }
-    })
+// function uploadItemPicture(msg, callback) {
+//     console.log("In uploadItemPicture profile pic. Msg: ", msg);
+//     console.log("id")
+//     console.log(msg.body.id)
+//     filename = msg.filename
+//     let updatedItems = [];
+//     let updatedSections = [];
+//     console.log("Inside post profile img in kafka")
+//     console.log(filename)
+//     Restaurant.findOne({ '_id': msg.body.id, 'sections': {'items' : {'itemName' : msg.body.itemName}}}, 
+//     function (err, results) {
+//         console.log(results)
+//         if (results) {
+//             console.log("Yaay restaurant");
+//             results.sections.forEach(function (section) {
+//                 if (section["sectionName"] == msg.body.sectionName) {
+//                     console.log(section.items)
+//                     if (section.items.length !== 0) {
+//                         let itemIndex = 0;
+//                         let sectionItemList = section.items;
+//                         for (itemIndex = 0; itemIndex < sectionItemList.length; itemIndex++) {
+//                             var anItem = sectionItemList[itemIndex];
+//                             if (anItem.itemName === msg.body.itemName) {
+//                                 console.log("equal")
+//                                 console.log(anItem.itemName)
+//                                 console.log(anItem.itemImg)
+//                                 console.log(filename)
+//                                 anItem.itemImg = filename;
+//                             }
+//                             updatedItems.push(anItem);
+//                         }
+//                     } 
+//                 }
+//                 updatedSections.push(section);
+//                 resuts.markModified("sections");
+//                 results.save(function (err) {
+//                 if (!err) {
+//                     callback(null, { status: 200, message: "item is added successfully!!" });
+//                 } else {
+//                     callback(null, { status: 200, message: "item not added!!" });
+//                 }
+//       });
+//             })
+//         } else {
+//             console.log(err);
+//             console.log("unable to read the database");
+//             callback(err, "Database Error");
+//         }
+//     })
 
-    Restaurant.update({'_id' : msg.body.id}, {
-        '$set' : {
-            'sections' : updatedSections,
-        }
-    });
-}
+//     Restaurant.update({'_id' : msg.body.id}, {
+//         '$set' : {
+//             'sections' : updatedSections,
+//         }
+//     });
+// }
 
 function getItemPicture(msg, callback) {
 

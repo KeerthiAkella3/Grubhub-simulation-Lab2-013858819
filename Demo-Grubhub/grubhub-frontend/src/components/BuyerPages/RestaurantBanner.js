@@ -16,7 +16,7 @@ export class RestaurantBanner extends Component {
     }
 
     componentDidMount = () => {
-        var restaurantId = cookie.load('cookie2');
+        var restaurantId = this.props.restaurantId;
        // e.preventDefault();
         axios.defaults.withCredentials = true;
         if (restaurantId) {

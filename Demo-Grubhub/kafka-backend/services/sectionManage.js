@@ -117,7 +117,7 @@ function addMenuItem(msg, callback) {
       var item = {
         "itemName": msg.itemData.itemName,
         "itemDescription": msg.itemData.itemDesc,
-        "itemImg": "",
+        "itemImg": msg.itemData.itemImage,
         "itemPrice": msg.itemData.itemPrice
       }
 

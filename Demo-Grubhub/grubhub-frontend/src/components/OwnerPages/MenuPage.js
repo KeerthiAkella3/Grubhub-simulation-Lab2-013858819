@@ -43,7 +43,7 @@ export class MenuPage extends Component {
     }
 
     componentWillMount = () => {
-        debugger;
+        ;
         let restaurantId = cookie.load('cookie1');
         console.log("restaurantId")
         console.log(restaurantId)
@@ -176,7 +176,7 @@ export class MenuPage extends Component {
         console.log("Handling deletion of menu item");
         // delete entry of this item from menu
         e.preventDefault();
-        
+
         let menu = [];
         let sections = [];
         axios.defaults.withCredentials = true;
@@ -235,7 +235,7 @@ export class MenuPage extends Component {
     }
 
     saveSectionAddModal = (sectionName) => {
-        debugger;
+        ;
         let restaurantId = cookie.load('cookie1');
         console.log("restaurant Id")
         console.log(restaurantId)
@@ -267,111 +267,100 @@ export class MenuPage extends Component {
     }
 
     saveMenuItemAddModal = (addItemState) => {
-        debugger
         let restaurantId = this.state.restaurantId;
         let sections = [];
         let menu = [];
-        //debugger;
         let formData = new FormData();
-                    formData.append('id', cookie.load("cookie1"));
-                    formData.append('table', "restaurantMenuTable");
-                    formData.append('selectedFile', addItemState.itemImage);
-                    formData.append('sectionName',addItemState.itemSection)
-                    
+        let itemImageFileName = undefined;
         const data = {
             restaurantId: cookie.load('cookie1'),
             menuItemName: addItemState.itemName,
             menuItemDesc: addItemState.itemDesc,
-            'selectedFile': addItemState.itemImage,
             menuItemPrice: addItemState.itemPrice,
             menuItemSection: addItemState.itemSection,
         }
+        formData.append('id', cookie.load("cookie1"));
+        formData.append('table', "restaurantMenuTable");
+        formData.append('selectedFile', addItemState.itemImage);
+        formData.append('sectionName', addItemState.itemSection);
         axios.defaults.withCredentials = true;
         console.log("data front end")
         console.log(data)
-        axios.post('http://localhost:3001/restaurantMenu', data)
-            .then(response => {
-                if (response.status === 200) {
-                    console.log('successfully added menu item to restaurants menu' + response.data.menuItemUniqueId);
-                    console.log(response.data.responseMessage);
-                    let itemId = response.data.menuItemUniqueId;
-                    let id = cookie.load("cookie1")
-                    debugger
-                    console.log("Upload Image Now")
-                    console.log(addItemState.itemImage)
-                    
+        axios({
+            method: 'post',
+            url: 'http://localhost:3001/img/upload ',
+            data: formData,
+            config: { headers: { 'Content-Type': 'multipart/form-data' } }
+        })
+            .then((response) => {
+                if (response.status >= 500) {
+                    throw new Error("Bad response from server");
+                }
+                console.log(response);
+                itemImageFileName = response.data.filename;
+                data.menuItemImage = itemImageFileName;
 
-                    axios({
-                        method: 'post',
-                        url: 'http://localhost:3001/img/upload ',
-                        data: formData,
-                        config: { headers: { 'Content-Type': 'multipart/form-data' } }
-                    })
-                        .then((response) => {
-                            if (response.status >= 500) {
-                                throw new Error("Bad response from server");
+                axios.post('http://localhost:3001/restaurantMenu', data)
+                    .then(response => {
+                        if (response.status === 200) {
+                            console.log('successfully added menu item to restaurants menu' + response.data.menuItemUniqueId);
+                            console.log(response.data.responseMessage);
+                            let itemId = response.data.menuItemUniqueId;
+                            let id = cookie.load("cookie1")
+                            console.log("Upload Image Now")
+                            console.log(addItemState.itemImage)
+                            // Update all menu items in this component's state.
+                            let anItem = {
+                                itemName: addItemState.itemName,
+                                itemDesc: addItemState.itemDesc,
+                                itemImage: addItemState.itemImage.name,
+                                itemPrice: addItemState.itemPrice,
+                                itemSection: addItemState.itemSection,
                             }
-                            console.log(response);
+
                             this.setState({
+                                items: this.state.items.concat(anItem),
                                 showMenuItemAddModal: false,
                             })
-                            return response.data;
-                        })
-                        .then((responseData) => {
-                            // alert(responseData.responseMessage);
-                            console.log('Menu Item Image Added');
-                        }).catch(function (err) {
-                            console.log(err)
-                        });
 
-                    // Update all menu items in this component's state.
-                    let anItem = {
-                        itemName: addItemState.itemName,
-                        itemDesc: addItemState.itemDesc,
-                        itemImage: addItemState.itemImage,
-                        itemPrice: addItemState.itemPrice,
-                        itemSection: addItemState.itemSection,
-                    }
-
-                    this.setState({
-                        items: this.state.items.concat(anItem),
-                        showMenuItemAddModal: false,
-                    })
-
-                    // refresh state with existing items
-                    axios.defaults.withCredentials = true;
-                    axios.get('http://localhost:3001/menu', {
-                        params: {
-                            restaurantId: restaurantId
-                        }
-                    })
-                        .then(response => {
-                            if (response.status === 200) {
-                                console.log('response from DB: ');
-                                console.log(response.data);
-                                menu.push(...response.data.menu);
-                                sections.push(...response.data.sections);
-                            } else {
-                                console.log("Status Code: ", response.status);
-                                console.log(response.data.responseMessage);
-                            }
-                            this.setState({
-                                items: menu,
-                                sections: sections,
-
+                            // refresh state with existing items
+                            axios.defaults.withCredentials = true;
+                            axios.get('http://localhost:3001/menu', {
+                                params: {
+                                    restaurantId: restaurantId
+                                }
                             })
-                        }).catch(error => {
-                            console.log(error);
-                        });
-                } else {
-                    console.log("Status Code: ", response.status);
-                    console.log(response.data.responseMessage);
-                }
-            }).catch(error => {
-                console.log(error);
-                this.setState({
-                    showMenuItemAddModal: false,
-                })
+                                .then(response => {
+                                    if (response.status === 200) {
+                                        console.log('response from DB: ');
+                                        console.log(response.data);
+                                        menu.push(...response.data.menu);
+                                        sections.push(...response.data.sections);
+                                    } else {
+                                        console.log("Status Code: ", response.status);
+                                        console.log(response.data.responseMessage);
+                                    }
+                                    this.setState({
+                                        items: menu,
+                                        sections: sections,
+
+                                    })
+                                }).catch(error => {
+                                    console.log(error);
+                                });
+                        } else {
+                            console.log("Status Code: ", response.status);
+                            console.log(response.data.responseMessage);
+                        }
+                    }).catch(error => {
+                        console.log(error);
+                        this.setState({
+                            showMenuItemAddModal: false,
+                        })
+                    });
+            })
+            .catch(function (err) {
+                console.log(err)
             });
     }
 
@@ -397,7 +386,7 @@ export class MenuPage extends Component {
                 let threeMenuItemsDOM = [];
                 for (let curColumn = 0; curColumn < 3 && index < allItems.length; curColumn++ , index++) {
                     let anItem = allItems[index];
-                    debugger
+
                     if (anItem.itemSection === sectionName) {
                         console.log("creating cards for " + anItem.itemName)
                         threeMenuItemsDOM.push(

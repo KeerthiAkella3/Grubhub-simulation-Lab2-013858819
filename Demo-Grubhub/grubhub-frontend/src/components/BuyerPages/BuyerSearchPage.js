@@ -135,9 +135,13 @@ export class BuyerSearchPage extends Component {
         let filterByCuisine = this.state.filterByCuisine;
         let maxResultsPerPage = 3;
 
+        console.log(searchResults);
         // List all search results in cards 
         for (index = 0; searchResults && index < searchResults.length; index++) {
             let anItem = searchResults[index];
+            if (anItem.restaurantName === undefined) {
+                continue;
+            }
             let listGroupStyle = {
                 paddingTop: "5px",
                 paddingBottom: "5px",
@@ -145,10 +149,7 @@ export class BuyerSearchPage extends Component {
                 style: "{{ backgroundColor: this.state.listGroupItemColor }}",
             }
 
-            // console.log(anItem.restaurantCuisine)
-            // console.log(filterByCuisine)
             if (filterByCuisine !== undefined && filterByCuisine !== anItem.restaurantCuisine) {
-                // console.log(anItem.restaurantCuisine)
                 continue;
             } else {
                 listGroupOrders.push(

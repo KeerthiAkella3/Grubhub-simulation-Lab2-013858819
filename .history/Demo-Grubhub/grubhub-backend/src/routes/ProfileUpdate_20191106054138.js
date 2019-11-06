@@ -107,6 +107,10 @@ router.post('/img/upload', upload.single('selectedFile'), function (req, res) {
   let pathKafka = ''
   if (req.body.table == "restaurantMenuTable") {
     pathKafka = "uploadItemPicture"
+    res.status(200).json({
+      responseMessage: 'Successfully stored the image fiel for menu item',
+      filename: filename,
+    })
   }
   else if (req.query.table === "buyerTable") {
     pathKafka = "uploadBuyerPicture"
@@ -129,11 +133,6 @@ router.post('/img/upload', upload.single('selectedFile'), function (req, res) {
         res.status(400).json({ responseMessage: 'No results found to update' });
       }
     });
-  } else {
-    res.status(200).json({
-      responseMessage: 'Successfully stored the image file for menu item',
-      filename: filename,
-    })
   }
 
 });
@@ -156,7 +155,7 @@ router.get('/profile/img', function (req, res) {
 
   kafka.make_request('loginSignuptopic', { "path": pathKafka, "body": req.query }, function (err, result) {
     console.log("result in backend for image")
-    // console.log(result)
+    console.log(result)
     if (err) {
       console.log(err);
       res.status(500).json({ responseMessage: 'Database not responding' });

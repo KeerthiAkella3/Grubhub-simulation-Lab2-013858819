@@ -131,7 +131,7 @@ router.post('/img/upload', upload.single('selectedFile'), function (req, res) {
     });
   } else {
     res.status(200).json({
-      responseMessage: 'Successfully stored the image file for menu item',
+      responseMessage: 'Successfully stored the image fiel for menu item',
       filename: filename,
     })
   }
@@ -156,7 +156,7 @@ router.get('/profile/img', function (req, res) {
 
   kafka.make_request('loginSignuptopic', { "path": pathKafka, "body": req.query }, function (err, result) {
     console.log("result in backend for image")
-    // console.log(result)
+    console.log(result)
     if (err) {
       console.log(err);
       res.status(500).json({ responseMessage: 'Database not responding' });

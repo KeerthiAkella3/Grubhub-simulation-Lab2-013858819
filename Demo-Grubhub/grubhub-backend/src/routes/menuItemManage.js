@@ -40,35 +40,35 @@ router.get('/menu', function (req, res) {
   console.log("in get menu method")
   kafka.make_request('restaurantMenu', { "path": "getMenu", "restaurantId": restaurantIdINT }, function (err, result) {
     console.log("result from get menu in menu item manage")
-    console.log(result)
+    // console.log(result)
     let getMenuResult = result.lists
     if (getMenuResult) {
-      console.log(getMenuResult);
+      // console.log(getMenuResult);
       for (index = 0; index < getMenuResult.length; index++) {
         let anItem = getMenuResult[index];
 
         console.log("anItem.items.length")
-        console.log(anItem.items.length)
+        // console.log(anItem.items.length)
         //  console.log(anItem.items[index].item)
         for (var j = 0; j < anItem.items.length; j++) {
           console.log("second for loop")
-          console.log(anItem.items[j])
+          // console.log(anItem.items[j])
           console.log("menuList")
-          console.log(menuList)
+          // console.log(menuList)
           let imageFilepath = undefined;
           let base64Image = undefined;
           console.log("Got this from DB menu anItem");
-          console.log(anItem.items[j]);
+          // console.log(anItem.items[j]);
           if (anItem.items[j].itemImg === null || anItem.items[j].itemImg === undefined || anItem.items[j].itemImg.length === 0) {
             // res.status(400).json({ responseMessage: 'Record not found' });
 
             console.log('No Image found for this item');
           } else if (typeof anItem.items[j].itemImg === "string") {
-            console.log(anItem.items[j].itemImg);
+            // console.log(anItem.items[j].itemImg);
             imageFilepath = path.join(__dirname, './../../uploads/profilePictures', anItem.items[j].itemImg);
-            console.log("file path.." + imageFilepath);
+            // console.log("file path.." + imageFilepath);
           } else {
-            console.log('invalid image');
+            // console.log('invalid image');
           }
 
           if (imageFilepath !== undefined) {
@@ -87,7 +87,7 @@ router.get('/menu', function (req, res) {
             itemSection: anItem.sectionName,
             itemImage: base64Image,
           }
-          console.log(resItem)
+          // console.log(resItem)
           menuList.push(resItem);
         }
 
@@ -96,7 +96,7 @@ router.get('/menu', function (req, res) {
       }
 
       console.log("menu items in menu item manage")
-      console.log(menuList)
+      // console.log(menuList)
 
       res.status(200).json({
         responseMessage: 'Found one or more items that matched',
@@ -205,7 +205,7 @@ router.post('/restaurantMenu',function (req, res) {
   var menuItemAddData = {
     itemName: req.body.menuItemName,
     itemDesc: req.body.menuItemDesc,
-    itemImage: "",
+    itemImage: req.body.menuItemImage,
     itemPrice: req.body.menuItemPrice,
     itemSection: req.body.menuItemSection,
     restaurantId: req.body.restaurantId,

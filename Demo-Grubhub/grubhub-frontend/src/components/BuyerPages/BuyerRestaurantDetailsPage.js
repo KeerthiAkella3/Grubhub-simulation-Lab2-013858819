@@ -313,7 +313,7 @@ export class BuyerRestaurantDetailsPage extends Component {
         return (
             <div>
                 <BuyerNavBar />
-                <RestaurantBanner restaurantName={restaurantName} />
+                <RestaurantBanner restaurantName={restaurantName} restaurantId={this.props.location.state.restaurantId}/>
                 <Container style={{
                     maxWidth: "100%",
                     width: "100%",
