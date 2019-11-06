@@ -44,6 +44,7 @@ var loginSignup = require('./src/routes/loginSignup.js')
 var menuItem = require('./src/routes/menuItemManage.js')
 var profilePage = require('./src/routes/ProfileUpdate.js');
 var orderManage = require('./src/routes/orderManage.js');
+var messagesManage = require('./src/routes/messagesManage.js');
 
 app.use('/uploads', express.static(path.join(__dirname, '/uploads/')));
 
@@ -83,3 +84,4 @@ app.use(bodyParser.urlencoded({
  app.use('/', menuItem);
  app.use('/', profilePage);
  app.use('/', orderManage);
+ app.use('/', messagesManage);

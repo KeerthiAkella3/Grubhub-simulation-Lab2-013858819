@@ -5,8 +5,11 @@ import OrderBrief from '../OwnerPages/OrderBrief'
 import ListGroup from 'react-bootstrap/ListGroup'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
+import Col from 'react-bootstrap/Col'
 import BuyerOrderBrief from './BuyerOrderBrief'
 import BuyerNavBar from './BuyerNavBar'
+import { Rnd } from "react-rnd";
+import Draggable from 'react-draggable'
 
 /**
  * - See All Past Orders
@@ -56,11 +59,15 @@ export class BuyerOrdersPage extends Component {
                 let anOrderData = listOfAllOrders[index];
                 if (anOrderData.buyerOrderStatus === "Past" || anOrderData.buyerOrderStatus === "Rejected") {
                     pastListGroupOrders.push(
-                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index}/>
+                        <Rnd default={{ width: "100%", height: "flex", y:pastListGroupOrders.length*300 + 100, x:0, }} enableResizing={false} dragAxis={'y'} bounds='body' enableUserSelectHack={false}>
+                            <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index} />
+                        </Rnd>
                     );
                 } else {
                     upcomingListGroupOrders.push(
-                        <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index}/>
+                        <Rnd default={{ width: "100%", height: "flex", y:pastListGroupOrders.length*300 + 100, x:0, }} enableResizing={false} dragAxis={'y'} bounds='body' enableUserSelectHack={false}>
+                            <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index} />
+                        </Rnd>
                     )
                 }
             }
@@ -69,10 +76,12 @@ export class BuyerOrdersPage extends Component {
         }
 
         let rowStyle = {
-            width: "100%",
-            height: "inherit",
+            height: "100%",
+            width: "inherit",
             marginRight: "0px",
             marginLeft: "0px",
+            paddingBottom: "0px",
+            marginBottom: "0px",
         }
 
 
@@ -84,29 +93,24 @@ export class BuyerOrdersPage extends Component {
                 <BuyerNavBar disableOrderStatus={true} />
                 <ListGroup defaultActiveKey="#link1">
                     <Container style={{
-                        maxWidth: "100%",
-                        width: "100%",
                         marginLeft: "0px",
                         marginRight: "0px",
                         paddingLeft: '2px',
                         paddingRight: '2px',
                     }}>
                         <Row style={rowStyle}>
-                            <Row style={rowStyle}>
+                            <Col sm={6}>
+                                <Row style={rowStyle}>
                                 <h1>Past Orders:</h1>
-                            </Row>
-                            <Row>
-                                {pastListDOM}
-                            </Row>
-
-                        </Row>
-                        <Row style={rowStyle}>
-                            <Row style={rowStyle}>
+                                    {pastListDOM}
+                                </Row>
+                            </Col>
+                            <Col sm={6}>
+                                <Row style={rowStyle}>
                                 <h1>Upcoming Orders:</h1>
-                            </Row>
-                            <Row style={rowStyle}>
-                                {upcomingListDOM}
-                            </Row>
+                                    {upcomingListDOM}
+                                </Row>
+                        </Col>
                         </Row>
                     </Container>
                 </ListGroup>

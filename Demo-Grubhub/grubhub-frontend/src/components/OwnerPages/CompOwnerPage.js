@@ -95,6 +95,7 @@ export class CompOwnerPage extends Component {
             paddingLeft: "0%",
             paddingRight: "0%",
             height: "100%",
+            width: "100%"
         }
 
         let sideBarCol = {
@@ -131,7 +132,7 @@ export class CompOwnerPage extends Component {
                     <Row style={grubhubRow}>
                         <Col style={sideBarCol}><SideNavInstance onOptionClick={this.handleSideBarSelect} defaultActiveKey = {activeKey} /> </Col>
                         {/* Based on what user clicks in sidebar, we need to display appropriate component. Default is Orders page */}
-                        <Col className={mainPageCol}>{page}</Col>
+                        <Col className={mainPageCol} >{page}</Col>
                     </Row>
                 </div>
             </div>

@@ -46,7 +46,10 @@ export class OrderPage extends Component {
         return (
             <Tabs defaultActiveKey="New" onSelect={this.refreshPage} mountOnEnter={true} unmountOnExit={true}>
                 <Tab eventKey="New" title="New">
-                    <Tab.Content>
+                    <Tab.Content style={{
+                        height: "100%",
+                        width: "100%",
+                    }}>
                         <Tab.Pane active="true">
                             <ListOrdersPage status="New" restaurantId={this.props.restaurantId} />
                         </Tab.Pane>
