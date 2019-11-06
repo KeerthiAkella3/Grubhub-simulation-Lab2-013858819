@@ -171,13 +171,14 @@ router.get('/profile/img', function (req, res) {
       console.log("Results found");
       console.log(result);
       console.log(result.img);
-      if (typeof result.img === String && result.img.length > 0) {
+      if (result.img !== null || result.img !== undefined || result.img !== '' || result.img.length !== 0) {
         var filePath = path.join(__dirname + './../../uploads/profilePictures', result.img);
         console.log("file path:", filePath);
         var base64str = base64_encode(filePath);
         console.log("converted img to base64 and sent");
         res.status(200).json({ base64str: base64str });
-      } else {
+      }
+      else {
         res.status(204).json({ responseMessage: 'No image found!' });
       }
     } else if (result.status === 204) {

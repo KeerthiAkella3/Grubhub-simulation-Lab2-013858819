@@ -65,7 +65,7 @@ export class BuyerOrdersPage extends Component {
                     );
                 } else {
                     upcomingListGroupOrders.push(
-                        <Rnd default={{ width: "100%", height: "flex", y:pastListGroupOrders.length*300 + 100, x:0, }} enableResizing={false} dragAxis={'both'} bounds='body' enableUserSelectHack={false}>
+                        <Rnd default={{ width: "100%", height: "flex", y:pastListGroupOrders.length*300 + 100, x:0, }} enableResizing={false} dragAxis={'y'} bounds='body' enableUserSelectHack={false}>
                             <BuyerOrderBrief anOrderData={anOrderData} orderStatus={anOrderData.buyerOrderStatus} key={index} />
                         </Rnd>
                     )
